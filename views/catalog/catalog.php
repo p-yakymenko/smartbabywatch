@@ -1,3 +1,8 @@
+<?php
+	use yii\helpers\Html;
+?>
+
+
 <header class="header">
 	<div class="container header-container">
 		<div class="header-col-logo">
@@ -35,7 +40,9 @@
 	</div>
 </header>
 	
+
 	<section class="section-catalog">
+	
 	<div class="container">
 		<div class="catalog-user-menu">
 			<div class="catalog-user-left">
@@ -221,54 +228,33 @@
 								</div>
 							</td>
 						</tr>
-						<tr>
-							<td><div class="tovar-number">123</div></td>
-							<td>
-								<div class="tovar-name">
-									<img src="style/img/tovar.png" class="tovar-name-img" alt="">
-									<a href="" class="tovar-name-title">Часы детские Smart Baby Watch Q50 (синие)</a>
-								</div>
-							</td>
-							<td>Smart Baby</td>
-							<td>123,45 руб</td>
-							<td>
-								<span class="tovar-status tovar-status-yes">доступно</span>
-							</td>
-							<td>
-								<div class="tovar-buy">
-									<div class="tovar-buy-input">
-										<span>-</span>
-										<input type="text" value="1">
-										<span>+</span>
+						
+						<?php foreach($items as $item){ ?>
+							<tr>
+								<td><div class="tovar-number"><?= Html::encode($item->code) ?></div></td>
+								<td>
+									<div class="tovar-name">
+										<img src="style/img/tovar.png" class="tovar-name-img" alt="">
+										<a href="" class="tovar-name-title"><?= Html::encode($item->name) ?></a>
 									</div>
-									<a href=""><img src="style/img/icons/basket.png" alt=""></a>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td><div class="tovar-number">123</div></td>
-							<td>
-								<div class="tovar-name">
-									<img src="style/img/tovar.png" class="tovar-name-img" alt="">
-									<a href="" class="tovar-name-title">Часы детские Smart Baby Watch Q50 (синие)</a>
-								</div>
-							</td>
-							<td>Smart Baby</td>
-							<td>123,45 руб</td>
-							<td>
-								<span class="tovar-status tovar-status-yes">доступно</span>
-							</td>
-							<td>
-								<div class="tovar-buy">
-									<div class="tovar-buy-input">
-										<span>-</span>
-										<input type="text" value="1">
-										<span>+</span>
+								</td>
+								<td><?= Html::encode($item->brand) ?></td>
+								<td><?= Html::encode($item->price) ?> руб</td>
+								<td>
+									<span class="tovar-status tovar-status-yes">доступно</span>
+								</td>
+								<td>
+									<div class="tovar-buy">
+										<div class="tovar-buy-input">
+											<span>-</span>
+											<input type="text" value="1">
+											<span>+</span>
+										</div>
+										<a href=""><img src="style/img/icons/basket.png" alt=""></a>
 									</div>
-									<a href=""><img src="style/img/icons/basket.png" alt=""></a>
-								</div>
-							</td>
-						</tr>
+								</td>
+							</tr>
+						<?php } ?>
 					</tbody>
 				</table>
 			</div>
