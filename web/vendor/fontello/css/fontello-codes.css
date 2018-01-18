@@ -1,0 +1,5 @@
+
+.icon-user-add:before { content: '\e800'; } /* '' */
+.icon-user-add-outline:before { content: '\e801'; } /* '' */
+.icon-address-book:before { content: '\e802'; } /* '' */
+.icon-doc-text:before { content: '\f0f6'; } /* '' */
