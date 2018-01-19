@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $content string */
 
 $asset = yii\gii\GiiAsset::register($this);
-/* Kappa */
+/* Kappa 2.0*/
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
