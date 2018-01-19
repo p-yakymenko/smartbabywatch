@@ -15,4 +15,8 @@ class SecureController extends Controller{
         return $this->render('login');
     }
 
+    public function actionSetting(){
+        return $this->render('profile_settings');
+    }
+
 }
