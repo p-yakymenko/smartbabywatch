@@ -23,7 +23,7 @@ class ProductController extends Controller{
     public function actionTrack(){
         return $this->render('track');
     }
-    // public function actionPreview(){
-    //     return $this->render('profile_preview');
-    // }
+    public function actionPreview(){
+        return $this->render('profile_preview');
+    }
 }
