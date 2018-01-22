@@ -1,6 +1,6 @@
 <?php
-use yii\helpers\Html;
-
+	use yii\helpers\Html;
+	use yii\helpers\Url;
 ?>
 
 <header class="header">
@@ -22,8 +22,10 @@ use yii\helpers\Html;
 			<span class="header-work">Сб и Вс – выходной</span>
 		</div>
 		<div class="header-col-login" >
-			<a href=""><img src="style/img/icons/out.png" alt="">Вход</a>
-			<a href=""><img src="style/img/icons/user.png" alt="">Регистрация</a>
+			<?php $url_to_reg = Url::to(['secure/register'])?>
+			<?php $url_to_log = Url::to(['secure/login'])?>
+			<a href="<?= $url_to_log ?>"><img src="style/img/icons/out.png" alt="">Вход</a>
+			<a href="<?= $url_to_reg ?>"><img src="style/img/icons/user.png" alt="">Регистрация</a>
 		</div>
 		<div class="header-col-basket" style="display: none">
 			<div class="header-basket">
@@ -51,11 +53,11 @@ use yii\helpers\Html;
 
 		<div class="section-preview-buttons wow fadeInUp" data-wow-delay="0.5s">
 			<div class="left">
-				<a href="" class="btn btn-border btn-round btn-white btn-preview">Вход</a>
+				<a href="<?= $url_to_log ?>" class="btn btn-border btn-round btn-white btn-preview">Вход</a>
 			</div>
 			<div class="right">
 				<div>
-					<a href="" class="btn btn-round btn-preview btn-preview-register">Регистрация</a>
+					<a href="<?= $url_to_reg ?>" class="btn btn-round btn-preview btn-preview-register">Регистрация</a>
 				</div>
 			</div>
 		</div>
@@ -154,8 +156,8 @@ use yii\helpers\Html;
 	<section class="section-ask">
 	<div class="container">
 		<h3 class="section-title title-normal title-ask wow fadeInUp">Остались вопросы? Напишите нам!</h3>
-
-		<a href="" class="btn btn-ask wow fadeInUp" data-wow-delay="0.3s">Задать вопрос</a>
+		<?php $url_to_email = Url::to(['rest/email'])?>
+		<a href="<?= $url_to_email ?>" class="btn btn-ask wow fadeInUp" data-wow-delay="0.3s">Задать вопрос</a>
 	</div>
 </section>
 

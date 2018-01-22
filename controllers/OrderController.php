@@ -8,13 +8,13 @@ class OrderController extends Controller{
 
     public $layout = 'generic';
 
-    public function actionMyOrder(){
+    public function actionMyorder(){
         return $this->render('myorder');
     }
-    public function actionOrderStart(){
+    public function actionOrderstart(){
         return $this->render('profile_order_start');
     }
-    public function actionOrderEnd(){
+    public function actionOrderend(){
         return $this->render('profile_order_end');
     }
 }

@@ -1,3 +1,8 @@
+<?php
+	use yii\helpers\Html;
+	use yii\helpers\Url;
+?>
+
 <!DOCTYPE html>
 <html lang="ru-RU">
 <head>
@@ -46,8 +51,10 @@
 			<span class="header-work">Сб и Вс – выходной</span>
 		</div>
 		<div class="header-col-login" >
-			<a href=""><img src="style/img/icons/out.png" alt="">Вход</a>
-			<a href=""><img src="style/img/icons/user.png" alt="">Регистрация</a>
+			<?php $url_to_reg = Url::to(['secure/register'])?>
+			<?php $url_to_log = Url::to(['secure/login'])?>
+			<a href="<?= $url_to_log ?>"><img src="style/img/icons/out.png" alt="">Вход</a>
+			<a href="<?= $url_to_reg ?>"><img src="style/img/icons/user.png" alt="">Регистрация</a>
 		</div>
 		<div class="header-col-basket" style="display: none">
 			<div class="header-basket">
@@ -68,9 +75,11 @@
 	<div class="container">
 		<div class="catalog-user-menu">
 	<div class="catalog-user-left">
-		<a href="" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
+		<?php $url_to_email = Url::to(['rest/email'])?>
+		<?php $url_to_profile = Url::to(['product/preview'])?>
+		<a href="<?= $url_to_profile ?>" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
 		<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
-		<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
+		<a href="<?= $url_to_email ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 	</div>
 	<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
 		<span>Добро пожаловать, Иван Петров</span>
