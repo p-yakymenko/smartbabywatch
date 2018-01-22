@@ -17,8 +17,8 @@
 			<span class="header-work">Сб и Вс – выходной</span>
 		</div>
 		<div class="header-col-login" >
-			<a href=""><img src="style/img/icons/out.png" alt="">Вход</a>
-			<a href=""><img src="style/img/icons/user.png" alt="">Регистрация</a>
+			<a href="<?= $url_to_log ?>"><img src="style/img/icons/out.png" alt="">Вход</a>
+			<a href="<?= $url_to_reg ?>"><img src="style/img/icons/user.png" alt="">Регистрация</a>
 		</div>
 		<div class="header-col-basket" style="display: none">
 			<div class="header-basket">

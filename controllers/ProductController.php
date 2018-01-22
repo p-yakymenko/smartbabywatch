@@ -11,10 +11,10 @@ class ProductController extends Controller{
     public function actionCatalog(){
         return $this->render('catalog');
     }
-    public function actionCatalogNotify(){
+    public function actionCatalognotify(){
         return $this->render('catalog_notify');
     }
-    public function actionCatalogReturn(){
+    public function actionCatalogreturn(){
         return $this->render('catalog_return');
     }
     public function actionRezerv(){
