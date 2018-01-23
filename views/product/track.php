@@ -167,10 +167,12 @@
 				<p>Copyright © ООО "Смарт Бэби Вотч" 2017. Все права защищены</p>
 			</div>
 			<div class="footer-col-politic">
-				<a href="" class="footer-link wow fadeInUp" data-wow-delay="0.2s">Пользовательское соглашение</a>
+				<?php $url_to_terms = Url::to(['footer/termsofuse'])?>
+				<a href="<?= $url_to_terms ?>" class="footer-link wow fadeInUp" data-wow-delay="0.2s">Пользовательское соглашение</a>
 			</div>
 			<div class="footer-col-cond">
-				<a href="" class="footer-link wow fadeInUp" data-wow-delay="0.1s">Политика конфиденциальности</a>
+				<?php $url_to_privacy = Url::to(['footer/privacy'])?>
+				<a href="<?= $url_to_privacy ?>" class="footer-link wow fadeInUp" data-wow-delay="0.1s">Политика конфиденциальности</a>
 			</div>
 			<div class="footer-col-social">
 				<ul class="footer-social wow fadeInUp">

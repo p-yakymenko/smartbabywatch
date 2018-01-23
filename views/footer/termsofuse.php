@@ -51,8 +51,8 @@
 		<span class="header-work">Сб и Вс – выходной</span>
 	</div>
 	<div class="header-col-login" >
-	<?php $url_to_reg = Url::to(['secure/register'])?>
-	<?php $url_to_log = Url::to(['secure/login'])?>
+		<?php $url_to_reg = Url::to(['secure/register'])?>
+		<?php $url_to_log = Url::to(['secure/login'])?>
 		<a href="<?= $url_to_log ?>"><img src="style/img/icons/out.png" alt="">Вход</a>
 		<a href="<?= $url_to_reg ?>"><img src="style/img/icons/user.png" alt="">Регистрация</a>
 	</div>
@@ -70,59 +70,62 @@
 	</div>
 </div>
 </header>
-
-	<section class="section-wrap">
+	
+	<section class="section-catalog">
 	<div class="container">
 		<div class="catalog-user-menu">
-	<div class="catalog-user-left">
-		<?php $url_to_email = Url::to(['rest/email'])?>
-		<?php $url_to_profile = Url::to(['product/preview'])?>
-		<a href="<?= $url_to_profile ?>" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
-		<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
-		<a href="<?= $url_to_email ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
-	</div>
-	<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
-		<span>Добро пожаловать, Иван Петров</span>
-		<a href="">Выйти</a>
-	</div>
+			<div class="catalog-user-left">
+				<?php $url_to_email = Url::to(['rest/email'])?>
+				<?php $url_to_profile = Url::to(['product/preview'])?>
+				<a href="<?= $url_to_profile ?>" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
+				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
+				<a href="<?= $url_to_email ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
+			</div>
+			<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
+				<span>Добро пожаловать, Иван Петров</span>
+				<a href="">Выйти</a>
+			</div>
+		</div>
+
+					
+
+	<h3 class="catalog-title">
+	Пользовательское соглашение
+</h3>
+
+<h4 class="text-title"> Sed ultrices eu sem </h4>
+<div class="text-content">
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur dapibus nibh enim, eu lobortis massa auctor sed. Ut lacinia consectetur nunc, 
+	a interdum quam molestie vel. Integer vel arcu at turpis porta imperdiet quis in orci. <br>
 </div>
 
-		<div class="row panel-wrap">
-			<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-				
-				
 
-				<div class="text-center">
-					<h3 class="catalog-title">
-						Написать письмо
-					</h3>
-					<p class="catalog-title-sub">Зарегистрированные клиенты могут оформлять заказы, просматривать статус и историю заказов.</p>
+<h4 class="text-title">Duis hendrerit felis</h4>
+<div class="text-content">
+	Suspendisse vel lacus in odio bibendum vestibulum eu sit amet risus. <br>
+	Quisque quis arcu tellus. Praesent at libero ac lacus vestibulum laoreet sed quis sapien. Vivamus ipsum eros, bibendum eget diam sit amet, elementum vehicula diam. <br>
+	Curabitur consectetur urna eget euismod auctor. <br>
+	Mauris maximus nisi consectetur convallis consequat. Phasellus non pretium arcu.<br>
+	Donec porta felis a ligula viverra tempor. Phasellus ac ipsum est. Pellentesque ante ipsum, tempus at dui non, fringilla aliquet risus. <br>
+	Nullam tristique mi vitae ex convallis, eu hendrerit turpis ultrices. Cras dui magna, condimentum eget tristique hendrerit, mattis et velit.<br>
+	Phasellus orci arcu, fringilla nec finibus quis, tincidunt vel massa. Fusce mattis suscipit massa, a hendrerit odio vulputate nec. Vivamus lacinia, est eget lacinia sagittis, lectus ex facilisis dui, quis dapibus massa ex eget enim.<br>
+	Nulla tellus nulla, vehicula vitae molestie non, sollicitudin eget massa.<br>
+</div>
+
+
+<h4 class="text-title">Nam auctor pulvinar sollicitudin</h4>
+<div class="text-content">
+Donec vehicula sit amet lacus vitae viverra. Mauris libero turpis, dignissim mollis neque at, aliquet rutrum odio. Nunc pellentesque nunc sed enim interdum, eu hendrerit ipsum viverra.<br>
+Donec pharetra gravida nulla sed pulvinar. Praesent rhoncus ante a velit tempor egestas.<br>
+Nam ac elit quis enim imperdiet aliquam vitae ac augue.<br>
+</div>
+
+						</div>
 				</div>
-				
-				<form action="/" method="post">
-					<div class="form-group">
-						<label class="form-label">Имя <span class="form-label-important">*</span></label>
-						<input type="text" class="form-control form-input">
-					</div>
-
-					<div class="form-group">
-						<label class="form-label">E-mail <span class="form-label-important">*</span></label>
-						<input type="text" class="form-control form-input">
-					</div>
-
-					<div class="form-group">
-						<label class="form-label">Чем мы можем Вам помочь? <span class="form-label-important">*</span></label>
-						<textarea name="" rows="7" class="form-control form-input"></textarea>
-					</div>
-					
-				
-	                <button type="submit" class="btn btn-blue">Отправить</button>
-				</form>
-
 			</div>
 		</div>
 	</div>
-</section> 
+</section>
 
 	<footer class="section-footer clearfix">
 	<div class="container">
