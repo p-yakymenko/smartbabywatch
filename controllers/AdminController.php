@@ -5,9 +5,12 @@ use Yii;
 use yii\web\Controller;
 use yii\web\Request;
 use yii\web\UploadedFile;
+use yii\helpers\Url;
 use app\models\Items;
+use app\models\News;
 use app\models\AddProductForm;
 use app\models\EditProductForm;
+use app\models\NewsEntryForm;
 
 class AdminController extends Controller{
     public $layout = 'admin'; // Задаём формат представлений для этого контроллера
@@ -58,8 +61,73 @@ class AdminController extends Controller{
     public function actionEditproduct($id){
         $model = new EditProductForm();
         $item_to_edit = Items::findOne($id);
-        return $this->render('editproduct', ['item' => $item_to_edit, 'model' => $model]);
+        
+        // Валидация данных
+        if($model->load(Yii::$app->request->post()) && $model->validate()){
+            // Сохранение введённых данных
+            $item_to_edit->name = $model->name;
+            $item_to_edit->brand = $model->brand;
+            $item_to_edit->code = $model->code;
+            $item_to_edit->quantity = $model->quantity;
+            $item_to_edit->price = $model->price;
+            $item_to_edit->save();
+            return $this->redirect(Url::to(['admin/products']));
+        } else {
+            // Выводим стандартную форму
+            $model->name = $item_to_edit->name;
+            $model->brand = $item_to_edit->brand;
+            $model->code = $item_to_edit->code;
+            $model->quantity = $item_to_edit->quantity;
+            $model->price = $item_to_edit->price;
+            return $this->render('editproduct', ['item' => $item_to_edit, 'model' => $model]);
+        }
+    }
+  
+    // Удалить текущую картинку на товаре
+    public function actionRemovepic($id){
+        echo 'test';
     }
 
+    // Загрузить новую картинку для товара
+    public function actionNewpic($id){
+        echo 'test2';
+    }
+
+    /* БЛОК УПРАВЛЕНИЯ НОВОСТЯМИ */
+    // Отображает все текущие новости
+    public function actionNews(){
+        $news = News::find()->all();
+        return $this->render('all_news', ['news' => $news]);
+    }
+
+    public function actionAddnews(){
+        $model = new NewsEntryForm();
+        
+        if($model->load(Yii::$app->request->post()) && $model->validate()){ // Валидация
+            // Обработка введённых данных
+            $new_news_entry = new News();
+            $new_news_entry->title = $model->title;
+            $new_news_entry->text = $model->text;
+            $new_news_entry->save();
+            return $this->redirect(['admin/news']);
+        } else {
+            // Вывести обычную форму ввода
+            return $this->render('addnews', ['model' => $model]);
+        }
+
+            
+    }
+
+    public function actionEditnews($id){
+
+    }
+
+    public function actionDeletenews($id){
+        $news_entry = News::findOne($id);
+        $new_entry->delete();
+        return $this->redirect(['admin/news']);
+    }
+        
+        
 
 }

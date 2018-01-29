@@ -220,7 +220,7 @@
 								<td><div class="tovar-number"><?= Html::encode($item->code) ?></div></td>
 								<td>
 									<div class="tovar-name">
-										<img src="style/img/tovar.png" class="tovar-name-img" alt="">
+										<?= Html::img($item->picture, ['class' => 'tovar-name-img']) ?>
 										<a href="" class="tovar-name-title"><?= Html::encode($item->name) ?></a>
 									</div>
 								</td>

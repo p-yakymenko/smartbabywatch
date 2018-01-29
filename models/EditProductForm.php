@@ -9,10 +9,18 @@ class EditProductForm extends Model{
 
     public $id;
     public $name;
+    public $brand;
+    public $code;
+    public $price;
+    public $quantity;
 
     public function rules(){
         return [
-            [['id','name'], 'required']
+            [['name'], 'required'],
+            [['brand'], 'required'],
+            [['code'], 'required'],
+            [['price'], 'required'],
+            [['quantity'], 'required']
         ];
     }
 
