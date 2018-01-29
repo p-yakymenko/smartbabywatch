@@ -1,38 +1,9 @@
 <?php
-	use yii\helpers\Html;
-	use yii\helpers\Url;
+    use yii\helpers\Url;
 ?>
 
-<!DOCTYPE html>
-<html lang="ru-RU">
-<head>
 
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="profile" href="http://gmpg.org/xfn/11">
-
-	<title>Title</title>
-	<meta name="description" content="" />
-	<meta name="keywords" content="" />
-
-	<!-- Стили от плагинов -->
-	<link rel="stylesheet" href="style/css/bootstrap.css">
-	<link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" href="vendor/animate.css/animate.min.css">
-	<link rel="stylesheet" href="vendor/css-hamburgers/hamburgers.min.css">
-	<link rel="stylesheet" href="vendor/fontello/css/fontello.css">
-	<link rel="stylesheet" href="vendor/swiper/css/swiper.min.css">
-
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-	<link rel="stylesheet" href="style/css/bootstrap-datepicker.min.css">
-	
-	<!-- Стиль -->
-	<link rel="stylesheet" href="style/css/custom.css?v1.9">
-
-</head>
-
-<body> 
-	<header class="header">
+<header class="header">
 	<div class="container header-container">
 		<div class="header-col-logo">
 			<a><img src="style/img/logo.png" alt="" class="header-logo"></a>
@@ -49,12 +20,6 @@
 		<div class="header-col-work">
 			<span class="header-work">Пн-Пт с 8:30 до 17:30 по МСК</span>
 			<span class="header-work">Сб и Вс – выходной</span>
-		</div>
-		<div class="header-col-login" >
-			<?php $url_to_reg = Url::to(['secure/register'])?>
-			<?php $url_to_log = Url::to(['secure/login'])?>
-			<a href="<?= $url_to_log ?>"><img src="style/img/icons/out.png" alt="">Вход</a>
-			<a href="<?= $url_to_reg ?>"><img src="style/img/icons/user.png" alt="">Регистрация</a>
 		</div>
 		<div class="header-col-basket" style="display: none">
 			<div class="header-basket">
@@ -75,14 +40,12 @@
 	<div class="container">
 		<div class="catalog-user-menu">
 			<div class="catalog-user-left">
-				<?php $url_to_email = Url::to(['rest/email'])?>
-				<?php $url_to_profile = Url::to(['product/preview'])?>
-				<a href="<?= $url_to_profile ?>" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
+				<a href="" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
 				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
-				<a href="<?= $url_to_email ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
+				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 			</div>
 			<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
-				<span>Добро пожаловать, Иван Петров</span>
+				<span>Добро пожаловать, <?= $user->name ?> <?= $user->surname ?></span>
 				<a href="">Выйти</a>
 			</div>
 		</div>
@@ -96,16 +59,11 @@
 
 							<div class="sidebar-menu">
 								<ul class="sidebar-menu-list">
-									<?php $url_to_catalog = Url::to(['product/catalog'])?>
-									<?php $url_to_oreders = Url::to(['product/track'])?>
-									<?php $url_to_rezerv = Url::to(['product/rezerv'])?>
-									<?php $url_to_return = Url::to(['product/catalogreturn'])?>
-									<?php $url_to_info = Url::to(['product/catalognotify'])?>
-									<li><a href="<?= $url_to_catalog ?>">Каталог товаров</a></li>
-									<li><a href="<?= $url_to_oreders ?>">Мои заказы</a></li>
-									<li><a href="<?= $url_to_rezerv ?>">Мои резервы</a></li>
-									<li><a href="<?= $url_to_return ?>">Возврат товара</a></li>
-									<li><a href="<?= $url_to_info ?>">Уведомления о товаре</a></li>
+									<li><a href="<?= Url::to(['catalog/index']) ?>">Каталог товаров</a></li>
+									<li><a href="">Мои заказы</a></li>
+									<li><a href="">Мои резервы</a></li>
+									<li><a href="">Возврат товара</a></li>
+									<li><a href="">Уведомления о товаре</a></li>
 								</ul>
 							</div>
 						</div>
@@ -115,14 +73,10 @@
 
 							<div class="sidebar-menu sidebar-menu-two">
 								<ul class="sidebar-menu-list">
-									<?php $url_to_deliver = Url::to(['rest/deliver'])?>
-									<?php $url_to_garant = Url::to(['rest/garant'])?>
-									<?php $url_to_news = Url::to(['rest/news'])?>
-									<?php $url_to_shares = Url::to(['rest/shares'])?>
-									<li><a href="<?= $url_to_deliver ?>">Доставка и оплата</a></li>
-									<li><a href="<?= $url_to_shares ?>">Акции производителей</a></li>
-									<li><a href="<?= $url_to_garant ?>">Гарантии и сервис</a></li>
-									<li><a href="<?= $url_to_news ?>">Новости</a></li>
+									<li><a href="">Доставка и оплата</a></li>
+									<li><a href="">Акции производителей</a></li>
+									<li><a href="">Гарантии и сервис</a></li>
+									<li><a href="">Новости</a></li>
 								</ul>
 							</div>
 						</div>
@@ -149,7 +103,7 @@
 	<div class="catalog-title-with">
 	<div class="catalog-title-with-left">
 		<h3 class="catalog-title">
-			Каталог товаров <span>123 товара</span>
+			Мои заказы
 		</h3>
 	</div>
 	<div class="catalog-title-with-right">
@@ -166,59 +120,7 @@
 	</li>
 </ul>
 
-<form action="/" method="post">
-	<div class="form-row">
-		<div class="form-field form-field-category form-select-style">
-			<select name="cat" class="form-select selectpicker">
-					<option value="">Выберите категорию</option>
-					<option value="">1</option>
-					<option value="">2</option>
-					<option value="">3</option>
-				</select>
-		</div>
-		<div class="form-field form-field-subcategory form-select-style">
-			<select name="cat" class="form-select selectpicker">
-					<option value="">Выберите категорию</option>
-					<option value="">1</option>
-					<option value="">2</option>
-					<option value="">3</option>
-				</select>
-		</div>
-		<div class="form-field form-field-search">
-			<div class="form-input form-input-search">
-				<input type="text" name="search" placeholder="Код или название товара">
-
-				<button type="submit" class="form-input-search-button">
-					<img src="style/img/icons/search.png" alt="">
-				</button>
-			</div>
-		</div>
-	</div>
-
-	<div class="form-row form-row-two form-row-order">
-		<div class="form-field form-field-category form-select-style">
-			<select name="cat" class="form-select selectpicker">
-					<option value="">Выберите категорию</option>
-					<option value="">1</option>
-					<option value="">2</option>
-					<option value="">3</option>
-				</select>
-		</div>
-		<div class="form-field form-field-subcategory form-select-style">
-			<select name="cat" class="form-select selectpicker">
-					<option value="">Выберите категорию</option>
-					<option value="">1</option>
-					<option value="">2</option>
-					<option value="">3</option>
-				</select>
-		</div>
-		<div class="form-field form-field-search">
-		</div>
-	</div>
-	
-</form>
-
-
+<?php // Вывод таблицы заказов ?>
 <div class="table-responsive">
 	<table class="catalog-table table vertical-aling gray">
 		<thead>
@@ -232,49 +134,42 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td>1</td>
-				<td>
-					01.02.2017 в 11:48
-				</td>
-				<td>самовывоз</td>
-				<td>наличными</td>
-				<td>
-					новый
-				</td>
-				<td class="noborder tadle-field-edit">
-					<ul class="table-edit">
-						<li>
-							<a href=""><img src="style/img/icons/delete.png" alt=""></a>
-						</li>
-						<li>
-							<a href=""><img src="style/img/icons/edit.png" alt=""></a>
-						</li>
+            <?php foreach($orders as $order){ ?>
+                <tr>
+                    <td><?= $order->id ?></td>
+                    <td><?= $order->created_at ?></td>
+                    <td>
+                        <?php
+                            // Способ доставки
+                            echo $delivery_methods[$order->delivery_method];
+                        ?>   
+                    </td>
+                    <td>
+                        <?php
+                            // Способ оплаты
+                            echo $payment_methods[$order->payment_method];
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            // Статус Заказа
+                            echo $order_status[$order->status];
+                        ?>
+                    </td>
+                    <td class="noborder tadle-field-edit">
+					    <ul class="table-edit">
+						    <li>
+							    <a href="<?= Url::to(['order/deleteorder', 'id'=>$order->id ]) ?>"><img src="style/img/icons/delete.png" alt=""></a>
+						    </li>
+						    <li>
+							    <a href=""><img src="style/img/icons/edit.png" alt=""></a>
+						    </li>
 					</ul>
 				</td>
-			</tr>
-			<tr>
-				<td>2</td>
-				<td>
-					01.02.2017 в 11:48
-				</td>
-				<td>самовывоз</td>
-				<td>наличными</td>
-				<td>
-					новый
-				</td>
-				<td class="noborder tadle-field-edit">
-					<ul class="table-edit">
-						<li>
-							<a href=""><img src="style/img/icons/delete.png" alt=""></a>
-						</li>
-						<li>
-							<a href=""><img src="style/img/icons/edit.png" alt=""></a>
-						</li>
-					</ul>
-				</td>
-			</tr>
-		</tbody>
+                </tr>
+
+            <?php } // конец цикла вывода заказов ?>
+			</tbody>
 	</table>
 </div>
 
@@ -309,12 +204,10 @@
 				<p>Copyright © ООО "Смарт Бэби Вотч" 2017. Все права защищены</p>
 			</div>
 			<div class="footer-col-politic">
-				<?php $url_to_terms = Url::to(['footer/termsofuse'])?>
-				<a href="<?= $url_to_terms ?>" class="footer-link wow fadeInUp" data-wow-delay="0.2s">Пользовательское соглашение</a>
+				<a href="" class="footer-link wow fadeInUp" data-wow-delay="0.2s">Пользовательское соглашение</a>
 			</div>
 			<div class="footer-col-cond">
-				<?php $url_to_privacy = Url::to(['footer/privacy'])?>
-				<a href="<?= $url_to_privacy ?>" class="footer-link wow fadeInUp" data-wow-delay="0.1s">Политика конфиденциальности</a>
+				<a href="" class="footer-link wow fadeInUp" data-wow-delay="0.1s">Политика конфиденциальности</a>
 			</div>
 			<div class="footer-col-social">
 				<ul class="footer-social wow fadeInUp">
@@ -340,5 +233,3 @@
 
 <!-- Свои скрипты -->
 <script src="style/js/custom.js?v1.7"></script>
-</body>
-</html>

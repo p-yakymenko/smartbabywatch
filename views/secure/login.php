@@ -1,6 +1,7 @@
 <?php
 	use yii\helpers\Html;
 	use yii\helpers\Url;
+	use yii\widgets\ActiveForm;
 ?>
 
 <header class="header">
@@ -54,6 +55,21 @@
 					<p class="catalog-title-sub">Зарегистрированные клиенты могут оформлять заказы, просматривать статус и историю заказов.</p>
 				</div>
 				
+
+				<?php
+				// Форма входа
+				$form = ActiveForm::begin();
+				?>
+					
+					<?= $form->field($model, 'email')->label('E-mail (login)') ?>
+					<?= $form->field($model, 'password')->passwordInput()->label('Пароль') ?>
+
+					<?= Html::submitButton('Войти', ['class' => 'btn btn-blue pull-right']) ?>
+
+				<?php 
+				ActiveForm::end();
+				?>
+				<br>
 				<form action="/" method="post">
 					<div class="form-group">
 						<label class="form-label">Логин/E-mail</label>

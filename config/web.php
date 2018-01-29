@@ -43,6 +43,9 @@ $config = [
             ],
         ],
         'db' => $db,
+        'user' => [
+            'identityClass' => 'app\models\UserActiveRecord'
+        ]
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

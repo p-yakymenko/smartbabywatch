@@ -1,38 +1,8 @@
 <?php
-	use yii\helpers\Html;
-	use yii\helpers\Url;
+    use yii\helpers\Url;
 ?>
 
-<!DOCTYPE html>
-<html lang="ru-RU">
-<head>
-
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="profile" href="http://gmpg.org/xfn/11">
-
-	<title>Title</title>
-	<meta name="description" content="" />
-	<meta name="keywords" content="" />
-
-	<!-- Стили от плагинов -->
-	<link rel="stylesheet" href="style/css/bootstrap.css">
-	<link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" href="vendor/animate.css/animate.min.css">
-	<link rel="stylesheet" href="vendor/css-hamburgers/hamburgers.min.css">
-	<link rel="stylesheet" href="vendor/fontello/css/fontello.css">
-	<link rel="stylesheet" href="vendor/swiper/css/swiper.min.css">
-
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-	<link rel="stylesheet" href="style/css/bootstrap-datepicker.min.css">
-	
-	<!-- Стиль -->
-	<link rel="stylesheet" href="style/css/custom.css?v1.9">
-
-</head>
-
-<body> 
-	<header class="header">
+<header class="header">
 	<div class="container header-container">
 		<div class="header-col-logo">
 			<a><img src="style/img/logo.png" alt="" class="header-logo"></a>
@@ -51,10 +21,8 @@
 			<span class="header-work">Сб и Вс – выходной</span>
 		</div>
 		<div class="header-col-login" >
-			<?php $url_to_reg = Url::to(['secure/register'])?>
-			<?php $url_to_log = Url::to(['secure/login'])?>
-			<a href="<?= $url_to_log ?>"><img src="style/img/icons/out.png" alt="">Вход</a>
-			<a href="<?= $url_to_reg ?>"><img src="style/img/icons/user.png" alt="">Регистрация</a>
+			<a href=""><img src="style/img/icons/out.png" alt="">Вход</a>
+			<a href=""><img src="style/img/icons/user.png" alt="">Регистрация</a>
 		</div>
 		<div class="header-col-basket" style="display: none">
 			<div class="header-basket">
@@ -75,11 +43,10 @@
 	<div class="container">
 		<div class="catalog-user-menu">
 	<div class="catalog-user-left">
-		<?php $url_to_email = Url::to(['rest/email'])?>
-		<?php $url_to_profile = Url::to(['product/preview'])?>
-		<a href="<?= $url_to_profile ?>" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
+        <a href="<?= Url::to(['catalog/index']) ?>" class="catalog-user-link wow fadeInUp">Каталог</a>
+		<a href="" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
 		<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
-		<a href="<?= $url_to_email ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
+		<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 	</div>
 	<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
 		<span>Добро пожаловать, Иван Петров</span>
@@ -100,7 +67,7 @@
 
  
 		
-		<form action="/" method="post">
+		
 			<div class="table-responsive">
 				<table class="catalog-table table vertical-aling gray">
 					<thead>
@@ -115,51 +82,62 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>2</td>
-							<td>
-								123
-							</td>
-							<td>
-								<div class="tovar-name tovar-name-auto">
-									<img src="style/img/tovar.png" class="tovar-name-img" alt="">
-									<a href="" class="tovar-name-title">Часы детские Smart Baby Watch Q50 (синие)</a>
-								</div>
-							</td>
-							<td>123,45 руб</td>
-							<td>
-								<div class="tovar-buy-input tovar-buy-input-31 tovar-buy-input-auto">
-									<span>-</span>
-									<input type="text" value="1">
-									<span>+</span>
-								</div>
-							</td>
-							<td><span class="font-bold">123,45 руб</span></td>
-							<td class="noborder tadle-field-edit tadle-field-edit-one">
-								<ul class="table-edit">
-									<li>
-										<a href=""><img src="style/img/icons/x-big.png" alt=""></a>
-									</li>
-								</ul>
-							</td>
-						</tr>
-						
+						<?php
+                        // Выводим товары из корзины
+                        $row_number = 1;
+                        $total_cost = 0;
+                        $total_quantity = 0;
+                        foreach($cart_content as $cart_entry){
+                            $total_entry_cost = $item_array[$cart_entry->item_id]['price'] * $cart_entry->quantity;
+                        ?>
+                            <tr>
+                                <td><?= $row_number ?></td>
+                                <td>
+                                    <?= $item_array[$cart_entry->item_id]['code']; ?>
+                                </td>
+                                <td>
+                                    <div class="tovar-name tovar-name-auto">
+                                        <img src="style/img/tovar.png" class="tovar-name-img" alt="">
+                                        <a href="" class="tovar-name-title"><?= $item_array[$cart_entry->item_id]['name']; ?></a>
+                                    </div>
+                                </td>
+                                <td><?= $item_array[$cart_entry->item_id]['price']; ?> р</td>
+                                <td>
+                                    
+                                        <?= $cart_entry->quantity ?>
+                                    
+                                </td>
+                                <td><span class="font-bold"><?= $total_entry_cost ?> руб</span></td>
+                                <td class="noborder tadle-field-edit tadle-field-edit-one">
+                                    <ul class="table-edit">
+                                        <li>
+                                            <a href="<?= Url::to(['cart/removeentry', 'id' => $cart_entry->id])?>"><img src="style/img/icons/x-big.png" alt=""></a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+						<?php 
+                            $total_quantity += $cart_entry->quantity;
+                            $total_cost += $total_entry_cost;
+                            $row_number += 1;
+                        } // заканчиваем вывод товара
+                        ?>
 					</tbody>
 				</table>
 			</div>
 			
 			<div class="table-rezerv-buttons-padding table-rezerv-buttons-padding-one clearfix">
 				<div class="rezerv-total">
-					Итого: <span>2</span> товара на <span>246,90 руб</span>
+					Итого: <span><?= $total_quantity ?></span> товара на <span><?= $total_cost ?> руб</span>
 				</div> 
 	            
 	            
-
-				<button type="submit" class="btn btn-blue pull-right">Оформить заказ</button>   
+				<a href="<?= Url::to(['cart/createorder']) ?>">
+				<button type="submit" class="btn btn-blue pull-right">Оформить заказ</button></a>
 
 				<button type="submit" class="btn btn-white btn-white-hover pull-right">Отложить в резерв</button>     
 			</div>   
-		</form>
+		
 	</div>
 </section>
   
@@ -188,12 +166,10 @@
 				<p>Copyright © ООО "Смарт Бэби Вотч" 2017. Все права защищены</p>
 			</div>
 			<div class="footer-col-politic">
-				<?php $url_to_terms = Url::to(['footer/termsofuse'])?>
-				<a href="<?= $url_to_terms ?>" class="footer-link wow fadeInUp" data-wow-delay="0.2s">Пользовательское соглашение</a>
+				<a href="" class="footer-link wow fadeInUp" data-wow-delay="0.2s">Пользовательское соглашение</a>
 			</div>
 			<div class="footer-col-cond">
-				<?php $url_to_privacy = Url::to(['footer/privacy'])?>
-				<a href="<?= $url_to_privacy ?>" class="footer-link wow fadeInUp" data-wow-delay="0.1s">Политика конфиденциальности</a>
+				<a href="" class="footer-link wow fadeInUp" data-wow-delay="0.1s">Политика конфиденциальности</a>
 			</div>
 			<div class="footer-col-social">
 				<ul class="footer-social wow fadeInUp">
@@ -219,5 +195,3 @@
 
 <!-- Свои скрипты -->
 <script src="style/js/custom.js?v1.7"></script>
-</body>
-</html>

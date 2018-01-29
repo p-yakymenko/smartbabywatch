@@ -1,6 +1,7 @@
 <?php
 	use yii\helpers\Html;
 	use yii\helpers\Url;
+	use yii\widgets\ActiveForm;
 ?>
 
 <header class="header">
@@ -54,6 +55,20 @@
 					<p class="catalog-title-sub">Зарегистрированные клиенты могут оформлять заказы, просматривать статус и историю заказов.</p>
 				</div>
 				
+				<?php
+					// Форма регистрации
+					$form = ActiveForm::begin();
+					
+				?>
+					
+					<?= $form->field($model, 'email')->input('email')->label('E-mail <span class="form-label-important">*</span>'); ?>
+					<?= $form->field($model, 'password')->passwordInput()->label('Пароль <span class="form-label-important">*') ?>
+					
+					<?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-blue header-button']) ?>
+
+
+				<?php ActiveForm::end() ?>
+
 				<form action="/" method="post">
 					<div class="form-group">
 						<label class="form-label">Имя <span class="form-label-important">*</span></label>

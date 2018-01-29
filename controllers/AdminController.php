@@ -4,6 +4,7 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\Request;
+use yii\web\UploadedFile;
 use app\models\Items;
 use app\models\AddProductForm;
 use app\models\EditProductForm;
@@ -24,12 +25,18 @@ class AdminController extends Controller{
     // Добавить новый продукт
     public function actionAddproduct(){
         $model = new AddProductForm();
-        
-        if($model->load(Yii::$app->request->post()) && $model->validate()){
-            // Блок кода, который выполняется, если форма была заполнена
+        if(Yii::$app->request->isPost){
+            $model->load(Yii::$app->request->post());
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            $pic_path = $model->upload();
+            
             $new_item = new Items();
-            $request = Yii::$app->request;
-            $new_item->name = $model->name; // Заменить на данные из post
+            $new_item->name = $model->name;
+            $new_item->brand = $model->brand;
+            $new_item->code = $model->code;
+            $new_item->quantity = $model->quantity;
+            $new_item->price = $model->price;
+            $new_item->picture = $pic_path;
             $new_item->save();
             return $this->render('addproduct-success');
         } else {

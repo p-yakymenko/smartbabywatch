@@ -54,8 +54,8 @@
 				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 			</div>
 			<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
-				<span>Добро пожаловать, Иван Петров</span>
-				<a href="">Выйти</a>
+				<span>Добро пожаловать, <?= $user->name ?> <?= $user->surname?></span>
+				<a href="<?= Url::to(['secure/logout']) ?>">Выйти</a>
 			</div>
 		</div>
 		 
@@ -68,6 +68,7 @@
 
 							<div class="sidebar-menu">
 								<ul class="sidebar-menu-list">
+									<li><a href="<?= Url::to(['cart/view']) ?>">Корзина</a></li>
 									<li><a href="">Каталог товаров</a></li>
 									<li><a href="">Мои заказы</a></li>
 									<li><a href="">Мои резервы</a></li>
@@ -211,28 +212,10 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td><div class="tovar-number">123</div></td>
-							<td>
-								<div class="tovar-name">
-									<img src="style/img/tovar.png" class="tovar-name-img" alt="">
-									<a href="" class="tovar-name-title">Часы детские Smart Baby Watch Q50 (синие)</a>
-								</div>
-							</td>
-							<td>Smart Baby</td>
-							<td>123,45 руб</td>
-							<td>
-								<span class="tovar-status tovar-status-none">не доступно</span>
-							</td>
-							<td>
-								<div class="tovar-order">
-									<a href="">Заказать</a>
-									<span>Уведомить о наличии</span>
-								</div>
-							</td>
-						</tr>
 						
-						<?php foreach($items as $item){ ?>
+						<?php 
+							// Цикл вывода товаров
+							foreach($items as $item){ ?>
 							<tr>
 								<td><div class="tovar-number"><?= Html::encode($item->code) ?></div></td>
 								<td>
@@ -244,17 +227,32 @@
 								<td><?= Html::encode($item->brand) ?></td>
 								<td><?= Html::encode($item->price) ?> руб</td>
 								<td>
-									<span class="tovar-status tovar-status-yes">доступно</span>
+									<?php // товар доступ или нет
+										if ($item->quantity > 0){
+											// товар доступен
+									?>
+										<span class="tovar-status tovar-status-yes">доступно</span>
+									<?php } else { ?>
+										<span class="tovar-status tovar-status-none">не доступно</span>
+									<?php } ?>
 								</td>
 								<td>
+									<?php // если товар доступен, его можно купить
+										if($item->quantity > 0){ ?>
 									<div class="tovar-buy">
 										<div class="tovar-buy-input">
 											<span>-</span>
 											<input type="text" value="1">
 											<span>+</span>
 										</div>
-										<a href=""><img src="style/img/icons/basket.png" alt=""></a>
+										<a href="<?= Url::current(['id'=>$item->id]) ?>"><img src="style/img/icons/basket.png" alt=""></a>
 									</div>
+										<?php } else { // а если он недоступен, его купить нельзя ?>
+											<div class="tovar-order">
+												<a href="">Заказать</a>
+												<span>Уведомить о наличии</span>
+											</div>
+										<?php } ?>
 								</td>
 							</tr>
 						<?php } ?>

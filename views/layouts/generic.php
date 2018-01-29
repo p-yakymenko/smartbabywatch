@@ -1,6 +1,5 @@
 <?php
 	use yii\helpers\Html;
-	
 ?>
 
 <?php $this->beginPage() ?>
@@ -34,7 +33,7 @@
 
 	<body>
 		<?php $this->beginBody() ?>
-			
+
 			<?= $content ?>		
 		
 		
