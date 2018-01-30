@@ -4,6 +4,19 @@
     use yii\widgets\ActiveForm;
 ?>
 
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Админка</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="<?= Url::to(['admin/products']) ?>">Товары</a></li>
+            <li><a href="<?= Url::to(['admin/orders']) ?>">Заказы</a></li>
+            <li><a href="<?= Url::to(['admin/news']) ?>">Новости</a></li>
+        </ul>
+    </div>
+</nav>
+
 <div class="container">
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>

@@ -15,6 +15,9 @@ use app\models\Delivery_method;
 use app\models\AddProductForm;
 use app\models\EditProductForm;
 use app\models\NewsEntryForm;
+use app\models\OrderItems;
+use app\models\OrderStatusAlterForm;
+use app\models\Order_status;
 
 class AdminController extends Controller{
     public $layout = 'admin'; // Задаём формат представлений для этого контроллера
@@ -149,6 +152,15 @@ class AdminController extends Controller{
 
     // Управление одним заказом
     public function actionOrder($id){
+        $model = new OrderStatusAlterForm();
+        if($model->load(Yii::$app->request->post()) && $model->validate()){ // проверяем, зашли ли данные
+            $order = Orders::findOne($id);
+            $order->status = $model->status_id;
+            $order->save();
+            
+            return $this->redirect(['admin/order', 'id' => $id]);
+        }
+        // или выводим сам заказ
         $order = Orders::findOne($id);
         $items = Items::find()->all();
         foreach($items as $item){
@@ -158,14 +170,32 @@ class AdminController extends Controller{
             $item_array[$item->id]['brand'] = $item->brand;
             $item_array[$item->id]['quantity'] = $item->quantity;
         }
-        $user = UserActiveRecord::find()->where(['id' => $order->user_id])->one();
+        $user = UserActiveRecord::findOne($order->user_id);
+        $order_statuses = Order_status::find()->all();
+        foreach($order_statuses as $order_status){
+            $order_status_array[$order_status->id] = $order_status->ru;
+        }
         $ordered_items = OrderItems::find()->where(['order_id' => $order->id])->all();
+        
         return $this->render('order', [
             'order' => $order,
             'ordered_items' => $ordered_items,
-            'items' => $item_array
+            'items' => $item_array,
+            'order_statuses' => $order_status_array,
+            'model' => $model
         ]);
     }
-        
+    
+    public function actionDeleteorder($id){
+        // Удалить итемы из другой таблицы, чтобы не засорять
+        $ordered_items = OrderItems::find()->where(['order_id' => $id])->all();
+        foreach($ordered_items as $ordered_item){
+            $ordered_item->delete();
+        }
+        //Удаляем непосредственно заказ
+        $order = Orders::findOne($id);
+        $order->delete();
+        return $this->redirect(['admin/orders']);
+    }
 
 }
