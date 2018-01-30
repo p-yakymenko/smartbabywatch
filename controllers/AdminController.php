@@ -7,7 +7,11 @@ use yii\web\Request;
 use yii\web\UploadedFile;
 use yii\helpers\Url;
 use app\models\Items;
+use app\models\UserActiveRecord;
 use app\models\News;
+use app\models\Orders;
+use app\models\Payment_method;
+use app\models\Delivery_method;
 use app\models\AddProductForm;
 use app\models\EditProductForm;
 use app\models\NewsEntryForm;
@@ -127,7 +131,41 @@ class AdminController extends Controller{
         $new_entry->delete();
         return $this->redirect(['admin/news']);
     }
-        
+
+    /* БЛОК УПРАВЛЕНИЯ ЗАКАЗАМИ */
+    // Отобразить все заказы
+    public function actionOrders(){
+        $orders = Orders::find()->all();
+        $users = UserActiveRecord::find()->all();
+        $payment_methods = Payment_method::find()->all();
+        $delivery_methods = Delivery_method::find()->all();
+        return $this->render('orders', [
+            'orders' => $orders,
+            'users' => $users,
+            'payment_methods' => $payment_methods,
+            'delivery_methods' => $delivery_methods
+            ]);
+    }
+
+    // Управление одним заказом
+    public function actionOrder($id){
+        $order = Orders::findOne($id);
+        $items = Items::find()->all();
+        foreach($items as $item){
+            $item_array[$item->id]['name'] = $item->name;
+            $item_array[$item->id]['price'] = $item->price;
+            $item_array[$item->id]['code'] = $item->code;
+            $item_array[$item->id]['brand'] = $item->brand;
+            $item_array[$item->id]['quantity'] = $item->quantity;
+        }
+        $user = UserActiveRecord::find()->where(['id' => $order->user_id])->one();
+        $ordered_items = OrderItems::find()->where(['order_id' => $order->id])->all();
+        return $this->render('order', [
+            'order' => $order,
+            'ordered_items' => $ordered_items,
+            'items' => $item_array
+        ]);
+    }
         
 
 }

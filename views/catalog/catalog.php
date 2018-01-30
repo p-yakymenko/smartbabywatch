@@ -68,6 +68,9 @@
 
 							<div class="sidebar-menu">
 								<ul class="sidebar-menu-list">
+									<?php if($user->isAdmin()){ ?>
+										<li><a href="<?= Url::to(['admin/products']) ?>">Админ панель</a></li>		
+									<?php } ?>
 									<li><a href="<?= Url::to(['cart/view']) ?>">Корзина</a></li>
 									<li><a href="">Каталог товаров</a></li>
 									<li><a href="">Мои заказы</a></li>

@@ -8,6 +8,7 @@ use yii\web\Controller;
 use app\models\Items; // наша ActiveRecord модель для работы с товарами
 use app\models\Cart; // Модель для работы с корзиной
 use app\models\UserActiveRecord; // Модель для работы с пользователем
+use app\models\News;
 
 class CatalogController extends Controller{
 
@@ -16,7 +17,7 @@ class CatalogController extends Controller{
     public function actionIndex(){
         
         $user_id = Yii::$app->user->id; // Получаем информацию о пользователе для дальнейшей работы
-        
+
         // Заглушка на случай, если сюда попал не залогиненный пользователь
         if(Yii::$app->user->isGuest){
             return $this->redirect(['static/index']);
@@ -44,6 +45,16 @@ class CatalogController extends Controller{
         $user = UserActiveRecord::findOne($user_id);
         
         return $this->render('catalog', ['items' => $items, 'user' => $user]);
+    }
+
+    public function actionNews(){
+        $news = News::find()->all();
+        return $this->render('news', ['news' => $news]);
+    }
+
+    public function actionNewsentry($id){
+        $news_entry = News::findOne($id);
+        return $this->render('news_entry', ['news_entry' => $news_entry]);
     }
 
 }

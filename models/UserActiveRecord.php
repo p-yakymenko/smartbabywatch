@@ -58,4 +58,11 @@ class UserActiveRecord extends ActiveRecord implements IdentityInterface{
         return $this->getAuthKey() === $authKey;
     }
 
+    // Кастомная функция, которая определяет, является ли пользователь админом
+    public function isAdmin(){
+        if($this->access_rights >= 200){
+            return true;
+        }
+    }
+
 }
