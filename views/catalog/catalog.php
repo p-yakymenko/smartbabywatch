@@ -1,6 +1,7 @@
 <?php
 	use yii\helpers\Html;
 	use yii\helpers\Url;
+	use yii\widgets\LinkPager;
 ?>
 
 
@@ -89,7 +90,7 @@
 									<li><a href="">Доставка и оплата</a></li>
 									<li><a href="">Акции производителей</a></li>
 									<li><a href="">Гарантии и сервис</a></li>
-									<li><a href="">Новости</a></li>
+									<li><a href="<?= Url::to(['catalog/news'])?>">Новости</a></li>
 								</ul>
 							</div>
 						</div>
@@ -98,9 +99,13 @@
 							<div class="sidebar-menu-title">Последние новости</div>
 
 							<ul class="sidebar-news">
-								<li><span class="sidebar-news-date">03 мая 2017 в 11:48</span><a href=""  class="sidebar-news-link">ВТБ подтвердил высокую позицию в Нацрейтинге корпоративного управления</a></li>
-								<li><span class="sidebar-news-date">02 мая 2017 в 11:48</span><a href=""  class="sidebar-news-link">Startsmile представил результаты пятого рейтинга частных стоматологий в РФ</a></li>
-								<li class="sidebar-news-last"><span class="sidebar-news-date">01 мая 2017 в 11:48</span><a href=""  class="sidebar-news-link">"ФосАгро" вошла в рейтинг лучших мировых работодателей</a></li>
+								<?php // вывод новостей
+									foreach($news as $news_entry){
+									?>
+										<li><span class="sidebar-news-date"><?= $news_entry->created_at ?></span><a href="<?= Url::to(['catalog/newsentry', 'id'=>$news_entry->id]) ?>"  class="sidebar-news-link"><?= $news_entry->title ?></a></li>
+									<?php	
+									}
+								?>	
 							</ul>
 						</div>
 					</div>
@@ -115,13 +120,13 @@
 
 	
 <h3 class="catalog-title">
-	Каталог товаров <span>123 товара</span>
+	Каталог товаров<br><span>Количество артикулов: <?= count($items) ?></span>
 </h3>
 
 <div class="form">
 	<form action="/" method="post">
 		<div class="form-row">
-			<div class="form-field form-field-category form-select-style">
+			<!-- <div class="form-field form-field-category form-select-style">
 				<select name="cat" class="form-select selectpicker">
 					<option value="">Выберите категорию</option>
 					<option value="">1</option>
@@ -145,20 +150,14 @@
 						<img src="style/img/icons/search.png" alt="">
 					</button>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		
 	</form>
 
 	<div class="form-params">
-		<div class="form-params-more">
-			<a href="">+ Больше параметров</a>
-		</div>
 		<div class="form-params-reset">
 			<a href=""><img src="style/img/icons/x.png" alt=""> Сбросить фильтр</a>
-		</div>
-		<div class="form-params-load">
-			<a href=""><img src="style/img/icons/file.png" alt=""> Загрузить заказ из файла</a>
 		</div>
 	</div>
 </div>
@@ -252,8 +251,7 @@
 									</div>
 										<?php } else { // а если он недоступен, его купить нельзя ?>
 											<div class="tovar-order">
-												<a href="">Заказать</a>
-												<span>Уведомить о наличии</span>
+												<a href="<?= Url::to(['catalog/notification_add', 'item_id' => $item->id ]) ?>">Уведомить о наличии</a>
 											</div>
 										<?php } ?>
 								</td>
@@ -318,16 +316,11 @@
 
 
 <nav class="catalog-nav">
-	<a href="" class="catalog-nav-item catalog-nav-back"><span class="catalog-nav-arr-back">&lt;</span> Предыдущая</a>
-	<div class="catalog-nav-center">
-		<a href="" class="catalog-nav-link">1</a>
-		<a href="" class="catalog-nav-link">2</a>
-		<a href="" class="catalog-nav-link">3</a>
-		<a href="" class="catalog-nav-link">4</a>
-		<span class="catalog-nav-sep">...</span>
-		<a href="" class="catalog-nav-link">5</a>
-	</div>
-	<a href="" class="catalog-nav-item catalog-nav-next">Следующая <span class="catalog-nav-arr-next">&gt;</span></a>
+	<?php
+		echo LinkPager::widget([
+			'pagination' => $pagination
+		]);
+	?>
 </nav>
 					
 

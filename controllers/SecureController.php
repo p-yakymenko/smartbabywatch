@@ -8,6 +8,7 @@ use app\models\UserActiveRecord;
 use app\models\UserRegisterForm;
 use app\models\UserLoginForm;
 use yii\helpers\Url;
+use yii\captcha\CaptchaAction;
 
 class SecureController extends Controller{
     
@@ -18,16 +19,41 @@ class SecureController extends Controller{
         
         
         if($model->load(Yii::$app->request->post()) && $model->validate()){
-            //данные зашли
+            // Обработка данных, введённых в форме
             
-            // ! добавить валидацию мыла
+            // Проверяем, не существует ли уже такой пользователь
+            $email_check = UserActiveRecord::find()->where(['username' => $model->email])->all();
+            if(!empty($email_check)){
+                $model = new UserRegisterForm;
+                return $this->render('register', ['model' => $model, 'error' => 'Такой e-mail адрес уже используется']);
+            }
+            
+
+            if($model->terms_accepted == 0){
+                $model = new UserRegisterForm;
+                return $this->render('register', ['model' => $model, 'error' => 'Вы должны принять условия лицензионного соглашения']);
+            }
             
             $user = new UserActiveRecord;
-            $user->username = $model->email;
+            $user->username = $model->email; // Мыло = логин/юзернейм
             $password_hash = Yii::$app->getSecurity()->generatePasswordHash($model->password);
             $user->password = $password_hash;
+            $user->fathers_name = $model->fathers_name;
+            $user->phone = $model->phone_number;
+            $user->newsletter_subscription = $model->newsletter_subscription;
+            $user->access_rights = 0;
 
-            $user->save();
+            
+            
+            if($model->password == $model->password_repeat){ // Проверка на то, совпадают ли пароли
+                $user->save();
+                return $this->redirect(['secure/login']);
+            } else {
+                $model = new UserRegisterForm;
+                return $this->render('register', ['model' => $model, 'error' => 'Пароли не совпадают']);
+            }
+
+            
 
 
         } else {
@@ -88,6 +114,14 @@ class SecureController extends Controller{
     public function actionSetting(){
         
         return $this->render('profile_settings');
+    }
+
+    public function actions(){
+        return [
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction'
+            ]
+        ];
     }
 
 }

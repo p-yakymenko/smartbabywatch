@@ -14,6 +14,7 @@
             <li><a href="<?= Url::to(['admin/products']) ?>">Товары</a></li>
             <li><a href="<?= Url::to(['admin/orders']) ?>">Заказы</a></li>
             <li><a href="<?= Url::to(['admin/news']) ?>">Новости</a></li>
+            <li><a href="<?= Url::to(['catalog/index']) ?>">Вернуться на сайт</a></li>
         </ul>
     </div>
 </nav>

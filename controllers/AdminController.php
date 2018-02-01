@@ -18,6 +18,8 @@ use app\models\NewsEntryForm;
 use app\models\OrderItems;
 use app\models\OrderStatusAlterForm;
 use app\models\Order_status;
+use app\models\NewPicForm;
+use app\models\Promotions;
 
 class AdminController extends Controller{
     public $layout = 'admin'; // Задаём формат представлений для этого контроллера
@@ -86,18 +88,48 @@ class AdminController extends Controller{
             $model->code = $item_to_edit->code;
             $model->quantity = $item_to_edit->quantity;
             $model->price = $item_to_edit->price;
-            return $this->render('editproduct', ['item' => $item_to_edit, 'model' => $model]);
+            $new_pic_form = new NewPicForm();
+            return $this->render('editproduct', [
+                'item' => $item_to_edit,
+                'model' => $model,
+                'new_pic_model' => $new_pic_form
+            ]);
         }
     }
   
     // Удалить текущую картинку на товаре
     public function actionRemovepic($id){
-        echo 'test';
+       // Удалить пусть к картинке
+        $item = Items::findOne($id);
+        $current_picture = $item->picture;
+        $item->picture = '';
+        $item->save();
+
+        // Удалить картинку, если ни один другой товар не ссылается на неё
+        // Проверяем, используется ли эта картинка где-то
+        $pic_check = Items::find()->where(['picture' => $current_picture])->all();
+        if(empty($pic_check)){
+            unlink($current_picture);
+        }
+        return $this->redirect(['admin/editproduct', 'id'=>$id]);
+       
     }
 
     // Загрузить новую картинку для товара
-    public function actionNewpic($id){
-        echo 'test2';
+    public function actionNewpic($item_id){
+        $new_pic_model = new NewPicForm;
+        if(Yii::$app->request->isPost){
+            $new_pic_model->load(Yii::$app->request->post());
+            $new_pic_model->new_picture = UploadedFile::getInstance($new_pic_model, 'new_picture');
+            $pic_path = $new_pic_model->upload(); // Загружаем картинку и получаем путь к ней
+            // изменяем путь в базе
+            $item = Items::findOne($item_id);
+            $item->picture = $pic_path;
+            $item->save();
+
+        }
+
+        return $this->redirect(['admin/editproduct', 'id' => $item_id]);
     }
 
     /* БЛОК УПРАВЛЕНИЯ НОВОСТЯМИ */
@@ -124,8 +156,23 @@ class AdminController extends Controller{
 
             
     }
-
+    
+    // Редактирование одной новости
     public function actionEditnews($id){
+        $model = new NewsEntryForm();
+        $news_entry = News::findOne($id);
+
+        if($model->load(Yii::$app->request->post()) && $model->validate()){ // Если были введены данные
+            $news_entry->title = $model->title; // Сохраняем новые введённые данные
+            $news_entry->text = $model->text;
+            $news_entry->save();
+            return $this->redirect(['admin/news']); // И возвращаемся на страницу с новостями
+        } else { // Если данных нет 
+            
+            $model->title = $news_entry->title;
+            $model->text = $news_entry->text;
+            return $this->render('addnews', ['model' => $model]);
+        }
 
     }
 
@@ -197,5 +244,15 @@ class AdminController extends Controller{
         $order->delete();
         return $this->redirect(['admin/orders']);
     }
+
+    /*==================================================
+    * Блок АКЦИЙ 
+    ===================================================*/ 
+    
+    public function actionDisplay_promotions(){
+        $promotions = Promotions::find()->orderBy(['created_at' => SORT_DESC])->all();
+        return $this->render('all_promotions', ['promotions' => $promotions]);
+    }
+
 
 }

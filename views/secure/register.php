@@ -56,71 +56,35 @@
 				</div>
 				
 				<?php
-					// Форма регистрации
+					/* === Форма регистрации === */
 					$form = ActiveForm::begin();
 					
 				?>
 					
 					<?= $form->field($model, 'email')->input('email')->label('E-mail <span class="form-label-important">*</span>'); ?>
 					<?= $form->field($model, 'password')->passwordInput()->label('Пароль <span class="form-label-important">*') ?>
+					<?= $form->field($model, 'password_repeat')->passwordInput()->label('Повторить пароль <span class="form-label-important">*') ?>
+					<?= $form->field($model, 'name')->label('Имя<span class="form-label-important">*</span>'); ?>
+					<?= $form->field($model, 'surname')->label('Фамилия<span class="form-label-important">*</span>'); ?>
+					<?= $form->field($model, 'fathers_name')->label('Отчество'); ?>
+					<?= $form->field($model, 'phone_number')->label('Номер телефона<span class="form-label-important">*</span>'); ?>
+
+					<?= $form->field($model, 'captcha')->widget(\yii\captcha\Captcha::classname(), ['captchaAction' => ['/secure/captcha']]) ?>
+
 					
+
+					<?= $form->field($model, 'terms_accepted')->checkbox([], false)->label('Я принимаю Пользовательское соглашение') ?>
+
+					
+					<?php
+						if(isset($error)){
+							echo $error;
+						}
+					?>
 					<?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-blue header-button']) ?>
 
 
 				<?php ActiveForm::end() ?>
-
-				<form action="/" method="post">
-					<div class="form-group">
-						<label class="form-label">Имя <span class="form-label-important">*</span></label>
-						<input type="text" class="form-control form-input">
-					</div>
-
-					<div class="form-group">
-						<label class="form-label">Фамилия <span class="form-label-important">*</span></label>
-						<input type="text" class="form-control form-input">
-					</div>
-					<div class="form-group">
-						<label class="form-label">Отчество</label>
-						<input type="text" class="form-control form-input">
-					</div>
-					<div class="form-group">
-						<label class="form-label">E-mail <span class="form-label-important">*</span></label>
-						<input type="text" class="form-control form-input">
-					</div>
-					<div class="form-group">
-						<label class="form-label">Пароль <span class="form-label-important">*</span></label>
-						<input type="text" class="form-control form-input">
-					</div>
-					<div class="form-group">
-						<label class="form-label">Повторите пароль <span class="form-label-important">*</span></label>
-						<input type="text" class="form-control form-input">
-					</div>
-					<div class="form-group">
-						<label class="form-label">Номер телефона <span class="form-label-important">*</span></label>
-						<input type="text" class="form-control form-input">
-					</div>
-
-					<div class="form-capha">
-						Captcha
-					</div>
-
-					<div class="checkbox checkbox-margin">
-	                    <input id="checkbox2" type="checkbox">
-	                    <label for="checkbox2">
-	                        Подписаться на новости и рассылки
-	                    </label>
-	                </div>
-
-	                <div class="checkbox checkbox-margin">
-	                    <input id="checkbox3" type="checkbox">
-	                    <label for="checkbox3">
-	                        Я принимаю
-	                    </label>
-	                    <a href="" class="termsuse-link">Пользовательское соглашение</a>
-	                </div>
-
-	                <button type="submit" class="btn btn-blue header-button">Зарегистрироваться</button>
-				</form>
 
 			</div>
 		</div>

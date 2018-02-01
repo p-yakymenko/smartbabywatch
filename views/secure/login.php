@@ -70,34 +70,6 @@
 				ActiveForm::end();
 				?>
 				<br>
-				<form action="/" method="post">
-					<div class="form-group">
-						<label class="form-label">Логин/E-mail</label>
-						<input type="text" class="form-control form-input">
-					</div>
-
-					<div class="form-group">
-						<label class="form-label">Пароль</label>
-						<input type="text" class="form-control form-input">
-					</div>
-					
-					
-					<div class="form-reg-bottom">
-						<div class="form-reg-bottom-left">
-							<div class="checkbox checkbox-margin">
-			                    <input id="checkbox2" type="checkbox">
-			                    <label for="checkbox2">
-			                        Запомнить меня
-			                    </label>
-			                </div>
-		                </div>
-		                <div class="form-reg-bottom-right">
-		                	<a href="" class="">Забыли пароль?</a>
-		                </div>
-	                </div>
-
-	                <button type="submit" class="btn btn-blue pull-right">Войти</button>
-				</form>
 
 			</div>
 		</div>

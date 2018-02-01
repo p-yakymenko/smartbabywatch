@@ -35,7 +35,6 @@ class AddProductForm extends Model{
             $this->imageFile->saveAs('uploads/'.$this->imageFile->baseName.'.'.$this->imageFile->extension);
             return 'uploads/'.$this->imageFile->baseName.'.'.$this->imageFile->extension;
         } else {
-            echo 'валидация не пройдена';
             return false;
         }
     }

@@ -13,6 +13,7 @@
             <li><a href="<?= Url::to(['admin/products']) ?>">Товары</a></li>
             <li><a href="<?= Url::to(['admin/orders']) ?>">Заказы</a></li>
             <li><a href="<?= Url::to(['admin/news']) ?>">Новости</a></li>
+            <li><a href="<?= Url::to(['catalog/index']) ?>">Вернуться на сайт</a></li>
         </ul>
     </div>
 </nav>
@@ -24,7 +25,7 @@
         <?= $form->field($model, 'title')->label('Название') ?>
         <?= $form->field($model, 'text')->textarea(['rows => 6'])->label('Текст') ?>
 
-        <?= Html::submitButton('Добавить', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary']) ?>
 
     <?php ActiveForm::end() ?>
 
