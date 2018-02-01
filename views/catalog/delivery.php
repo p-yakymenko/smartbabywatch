@@ -2,7 +2,6 @@
     use yii\helpers\Url;
 ?>
 
-
 <header class="header">
 	<div class="container header-container">
 		<div class="header-col-logo">
@@ -20,6 +19,10 @@
 		<div class="header-col-work">
 			<span class="header-work">Пн-Пт с 8:30 до 17:30 по МСК</span>
 			<span class="header-work">Сб и Вс – выходной</span>
+		</div>
+		<div class="header-col-login" >
+			<a href=""><img src="style/img/icons/out.png" alt="">Вход</a>
+			<a href=""><img src="style/img/icons/user.png" alt="">Регистрация</a>
 		</div>
 		<div class="header-col-basket" style="display: none">
 			<div class="header-basket">
@@ -108,87 +111,60 @@
 
 					
 
-	<div class="catalog-title-with">
-	<div class="catalog-title-with-left">
-		<h3 class="catalog-title">
-			<?php if(!isset($name)){ ?>
-				Мои заказы
-			<?php } else { ?>
-				Резервы
-			<?php } ?>
-		</h3>
-	</div>
-	<div class="catalog-title-with-right">
-		<a href="" class="track-order-link"><img src="style/img/icons/location.png" alt=""> Отследить заказ</a>
-	</div>
+					<h3 class="catalog-title">
+	Доставка и оплата
+</h3>
+
+<h4 class="text-title">Требуемые документы</h4>
+<div class="text-content">
+	Оценка суммы вашего возврата в системе b2b является предварительной. Окончательная сверка суммы возврата осуществляется через бухгалтерию и вашего менеджера.<br>
+	При осуществлении возврата необходимо предоставить следующий пакет обязательных документов:<br>
+	ТТН (Товарно-Транспортная Накладная) - 2 экземпляра.<br>
+	Накл. Торг 12 - 1 экз.<br>
+	Счет-фактура - 1 экз.<br>
+	Складом будет отмечаться только ТТН 1 экземпляр.<br>
+	Без предоставления указанных выше документов Возврат приниматься не будет.<br>
 </div>
 
-<?php if(!isset($name)) { ?>
-<ul  class="nav nav-pills nav-pills-merge margin-small nav-pills-merge-block">
-	<li class="active">
-		<a href="#1b" data-toggle="tab">Активные</a>
-	</li>
-	<li class="">
-		<a href="#1b" data-toggle="tab">Архивные</a>
-	</li>
-</ul>
-<?php } ?>
 
-<?php // Вывод таблицы заказов ?>
-<div class="table-responsive">
-	<table class="catalog-table table vertical-aling gray">
-		<thead>
-			<tr>
-				<th class=""><div>№ заказа</div></th>
-				<th class=""><div>Дата и время</div></th>
-				<th class=""><div>Способ доставки</div></th>
-				<th class=""><div>Способ оплаты</div></th>
-				<th class="last"><div>Статус</div></th>
-				<th class=""></th>
-			</tr>
-		</thead>
-		<tbody>
-            <?php foreach($orders as $order){ ?>
-                <tr>
-                    <td><?= $order->id ?></td>
-                    <td><?= $order->created_at ?></td>
-                    <td>
-						
-                        <?php
-							$delivery_method_id = $order->delivery_method;
-							echo $delivery_methods[$delivery_method_id];
-							
-							
-                        ?>   
-                    </td>
-                    <td>
-                        <?php
-                            // Способ оплаты
-                            echo $payment_methods[$order->payment_method];
-                        ?>
-                    </td>
-                    <td>
-                        <?php
-                            // Статус Заказа
-                            echo $order_status[$order->status];
-                        ?>
-                    </td>
-                    <td class="noborder tadle-field-edit">
-					    <ul class="table-edit">
-						    <li>
-							    <a href="<?= Url::to(['order/deleteorder', 'id'=>$order->id ]) ?>"><img src="style/img/icons/delete.png" alt=""></a>
-						    </li>
-						    <li>
-							    <a href=""><img src="style/img/icons/edit.png" alt=""></a>
-						    </li>
-					</ul>
-				</td>
-                </tr>
-
-            <?php } // конец цикла вывода заказов ?>
-			</tbody>
-	</table>
+<h4 class="text-title">Возврат товара надлежащего качества</h4>
+<div class="text-content">
+	Для возврата товара надлежащего качества необходимо оформить заявку на возврат в разделе Возврат Товара<br>
+	Заявка на возврат оформляется при безналичной форме оплаты товара.<br>
+	Возврат товара возможен только на нашем складе расположенном по адресу: Московская область, Подольский р-н, с. Сынково, вл. 80 Схема проезда<br>
+	Купленный у нас товар принимается к возврату в течение двух недель с момента покупки, при сохранении товарного вида, оригинальной упаковки и потребительских свойств.<br>
+	Не принимаются к возврату шины использованные или бортированные.<br>
+	Не принимаются к возврату диски без коробок, без крепежа (болты или гайки, центровочные кольца), если таковые были в комплекте, без декоративной заглушки или колпака, в зависимости от комплектации, бортированные или с испорченным лакокрасочным покрытием.<br>
+	Заявка на возврат создается путем добавления кода товара (складской код). Вы можете найти его в товарной накладной в графе "код", в файлах в формате Excel из раздела "файлы с остатками", а также в разделе "подбор шин" ("подбор дисков").<br>
+	 Необходимо указать желаемую дату возврата (дату Вашего посещения склада).<br>
+	Для ускорения обработки Вашей заявки на возврат, возврат ШИН и ДИСКОВ необходимо оформлять разными заявками.<br>
+	После отправки заявки и обработки ее менеджером вы увидите смену статуса заявки, зайдя в заявку увидите цены и одобрение/не одобрение каждой позиции.<br>
+	Заявку на возврат нельзя редактировать и отменить. Если у вас возникла необходимость отменить или уменьшить количество товара в заявке свяжитесь с Вашим менеджером.<br>
+	По приезду на склад, пожалуйста назовите номер Вашей заявки на возврат.<br>
+	Товары не оформленные вышеописанным способом к возврату приниматься не будут.<br>
 </div>
+
+
+<h4 class="text-title">Возврат брака</h4>
+<div class="text-content">
+	Оформление заявки на возврат брака аналогично оформлению обычной заявки на возврат товара за исключением следующих моментов: При создании заявки необходимо выбрать в состояние товара "БРАК".<br>
+Необходимо заполнить и распечатать рекламационное заявление по бренду. Копию рекламацмм нужно отправить по электронной почте своему менеджеру.<br>
+Оригинал распечатанного рекламационного заявления нужно отдать на складе при сдаче бракованного товара.<br>
+</div>
+
+<h4 class="text-title">Печатные бланки рекламаций и инструкции по их заполнению</h4>
+<div class="text-content">
+	Nokian Tyres<br>
+Bridgestone<br>
+Тoyo<br>
+Dunlop<br>
+Yokohama<br>
+Continental<br>
+Maxxis<br>
+Goodyear<br>
+</div>
+
+
 
 						</div>
 				</div>

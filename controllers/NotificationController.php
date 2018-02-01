@@ -9,7 +9,7 @@ class NotificationController extends Controller{
     public $layout = 'general';
 
     public function actionIndex(){
-        echo 'Уведомления';
+       
     }
 
 }

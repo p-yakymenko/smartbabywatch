@@ -48,7 +48,7 @@
 				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 			</div>
 			<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
-				<span>Добро пожаловать, Иван Петров</span>
+				<span>Добро пожаловать, <?= $user->name ?> <?= $user->surname ?></span>
 				<a href="">Выйти</a>
 			</div>
 		</div>
@@ -61,13 +61,17 @@
 							<div class="sidebar-menu-title">Товары и заказы</div>
 
 							<div class="sidebar-menu">
-								<ul class="sidebar-menu-list">
-									<li><a href="">Каталог товаров</a></li>
-									<li><a href="">Мои заказы</a></li>
-									<li><a href="">Мои резервы</a></li>
-									<li><a href="">Возврат товара</a></li>
-									<li><a href="">Уведомления о товаре</a></li>
-								</ul>
+							<ul class="sidebar-menu-list">
+								<?php if($user->isAdmin()){ ?>
+									<li><a href="<?= Url::to(['admin/products']) ?>">Админ панель</a></li>		
+								<?php } ?>
+								<li><a href="<?= Url::to(['cart/view']) ?>">Корзина</a></li>
+								<li><a href="<?= Url::to(['catalog/index']) ?>">Каталог товаров</a></li>
+								<li><a href="<?= Url::to(['order/myorders']) ?>">Мои заказы</a></li>
+								<li><a href="<?= Url::to(['order/myorders','status'=>'reserved']) ?>">Мои резервы</a></li>
+								<li><a href="">Возврат товара</a></li>
+								<li><a href="">Уведомления о товаре</a></li>
+							</ul>
 							</div>
 						</div>
 						
@@ -76,10 +80,10 @@
 
 							<div class="sidebar-menu sidebar-menu-two">
 								<ul class="sidebar-menu-list">
-									<li><a href="">Доставка и оплата</a></li>
-									<li><a href="">Акции производителей</a></li>
-									<li><a href="">Гарантии и сервис</a></li>
-									<li><a href="">Новости</a></li>
+									<li><a href="<?= Url::to(['catalog/delivery'])?>">Доставка и оплата</a></li>
+									<li><a href="<?= Url::to(['catalog/promotions'])?>">Акции производителей</a></li>
+									<li><a href="<?= Url::to(['catalog/guarantee'])?>">Гарантии и сервис</a></li>
+									<li><a href="<?= Url::to(['catalog/news'])?>">Новости</a></li>
 								</ul>
 							</div>
 						</div>
@@ -88,9 +92,13 @@
 							<div class="sidebar-menu-title">Последние новости</div>
 
 							<ul class="sidebar-news">
-								<li><span class="sidebar-news-date">03 мая 2017 в 11:48</span><a href=""  class="sidebar-news-link">ВТБ подтвердил высокую позицию в Нацрейтинге корпоративного управления</a></li>
-								<li><span class="sidebar-news-date">02 мая 2017 в 11:48</span><a href=""  class="sidebar-news-link">Startsmile представил результаты пятого рейтинга частных стоматологий в РФ</a></li>
-								<li class="sidebar-news-last"><span class="sidebar-news-date">01 мая 2017 в 11:48</span><a href=""  class="sidebar-news-link">"ФосАгро" вошла в рейтинг лучших мировых работодателей</a></li>
+								<?php // вывод новостей
+									foreach($sidebar_news as $news_entry){
+									?>
+										<li><span class="sidebar-news-date"><?= $news_entry->created_at ?></span><a href="<?= Url::to(['catalog/newsentry', 'id'=>$news_entry->id]) ?>"  class="sidebar-news-link"><?= $news_entry->title ?></a></li>
+									<?php	
+									}
+								?>	
 							</ul>
 						</div>
 					</div>

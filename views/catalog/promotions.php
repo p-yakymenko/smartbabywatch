@@ -2,7 +2,6 @@
     use yii\helpers\Url;
 ?>
 
-
 <header class="header">
 	<div class="container header-container">
 		<div class="header-col-logo">
@@ -20,6 +19,10 @@
 		<div class="header-col-work">
 			<span class="header-work">Пн-Пт с 8:30 до 17:30 по МСК</span>
 			<span class="header-work">Сб и Вс – выходной</span>
+		</div>
+		<div class="header-col-login" >
+			<a href=""><img src="style/img/icons/out.png" alt="">Вход</a>
+			<a href=""><img src="style/img/icons/user.png" alt="">Регистрация</a>
 		</div>
 		<div class="header-col-basket" style="display: none">
 			<div class="header-basket">
@@ -108,87 +111,36 @@
 
 					
 
-	<div class="catalog-title-with">
-	<div class="catalog-title-with-left">
-		<h3 class="catalog-title">
-			<?php if(!isset($name)){ ?>
-				Мои заказы
-			<?php } else { ?>
-				Резервы
-			<?php } ?>
-		</h3>
-	</div>
-	<div class="catalog-title-with-right">
-		<a href="" class="track-order-link"><img src="style/img/icons/location.png" alt=""> Отследить заказ</a>
-	</div>
-</div>
+	<h3 class="catalog-title">
+	Новости
+</h3>
 
-<?php if(!isset($name)) { ?>
-<ul  class="nav nav-pills nav-pills-merge margin-small nav-pills-merge-block">
-	<li class="active">
-		<a href="#1b" data-toggle="tab">Активные</a>
-	</li>
-	<li class="">
-		<a href="#1b" data-toggle="tab">Архивные</a>
-	</li>
+<ul class="news-block">
+	<?php foreach($promotions as $promotion){ ?>
+        <li class="news-block-item">
+            <div class="news-block-field-img">
+                <a href="">
+                    <img src="style/img/news.png" alt="">
+                </a>
+            </div>
+            <div class="news-block-field-text">
+                <span class="news-block-date"><?= $promotion->created_at ?></span>
+                <a href="<?= Url::to(['catalog/promotion', 'id' => $promotion->id ])?>" class="news-block-title"><?= $promotion->title ?></a>
+                <p class="news-block-text">
+                    <?php 
+                    $text = $promotion->text;
+                    if(strlen($text) > 300){
+                        $text = substr ($text, 0,strpos ($text, " ", 300));
+                        $text .= '...';
+                    }
+                    ?>
+                    <?= $text ?>
+                </p>
+            </div>
+        </li>
+    <?php } ?>
+	
 </ul>
-<?php } ?>
-
-<?php // Вывод таблицы заказов ?>
-<div class="table-responsive">
-	<table class="catalog-table table vertical-aling gray">
-		<thead>
-			<tr>
-				<th class=""><div>№ заказа</div></th>
-				<th class=""><div>Дата и время</div></th>
-				<th class=""><div>Способ доставки</div></th>
-				<th class=""><div>Способ оплаты</div></th>
-				<th class="last"><div>Статус</div></th>
-				<th class=""></th>
-			</tr>
-		</thead>
-		<tbody>
-            <?php foreach($orders as $order){ ?>
-                <tr>
-                    <td><?= $order->id ?></td>
-                    <td><?= $order->created_at ?></td>
-                    <td>
-						
-                        <?php
-							$delivery_method_id = $order->delivery_method;
-							echo $delivery_methods[$delivery_method_id];
-							
-							
-                        ?>   
-                    </td>
-                    <td>
-                        <?php
-                            // Способ оплаты
-                            echo $payment_methods[$order->payment_method];
-                        ?>
-                    </td>
-                    <td>
-                        <?php
-                            // Статус Заказа
-                            echo $order_status[$order->status];
-                        ?>
-                    </td>
-                    <td class="noborder tadle-field-edit">
-					    <ul class="table-edit">
-						    <li>
-							    <a href="<?= Url::to(['order/deleteorder', 'id'=>$order->id ]) ?>"><img src="style/img/icons/delete.png" alt=""></a>
-						    </li>
-						    <li>
-							    <a href=""><img src="style/img/icons/edit.png" alt=""></a>
-						    </li>
-					</ul>
-				</td>
-                </tr>
-
-            <?php } // конец цикла вывода заказов ?>
-			</tbody>
-	</table>
-</div>
 
 						</div>
 				</div>

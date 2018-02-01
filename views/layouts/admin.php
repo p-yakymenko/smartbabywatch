@@ -1,5 +1,6 @@
 <?php
     use yii\helpers\Html;
+    use yii\helpers\Url;
 
 ?>
 
@@ -24,7 +25,24 @@
     <body>
         <?php $this->beginBody() ?>
             
-            <?= $content ?>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Админка</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li><a href="<?= Url::to(['admin/products']) ?>">Товары</a></li>
+                    <li><a href="<?= Url::to(['admin/orders']) ?>">Заказы</a></li>
+                    <li><a href="<?= Url::to(['admin/news']) ?>">Новости</a></li>
+                    <li><a href="<?= Url::to(['admin/display_promotions']) ?>">Акции</a></li>
+                    <li><a href="<?= Url::to(['catalog/index']) ?>">Вернуться на сайт</a></li>
+                </ul>
+            </div>
+        </nav>
+
+            <div class="container">
+                <?= $content ?>
+            </div>
 
             <script src="vendor/jquery/jquery.js"></script>
             <script src="vendor/bootstrap/js/bootstrap.min.js"></script>

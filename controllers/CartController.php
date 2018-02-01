@@ -16,6 +16,9 @@ class CartController extends Controller{
 
     public $layout = 'generic';
 
+    /*
+    *   Просмотр корзины
+    */
     public function actionView(){
         $user_id = Yii::$app->user->id;
         
@@ -41,12 +44,20 @@ class CartController extends Controller{
         return $this->redirect(Url::to(['cart/view']));
     }
 
-    public function actionCreateorder(){
+    public function actionCreateorder($status = ''){
         // Создаём заказ
         $order = new Orders();
         $user_id = Yii::$app->user->id; // Получаем айди текущего пользователя
+        $user = UserActiveRecord::findOne($user_id); // Получаем пользователя и берём из него способ доставки и оплаты
         $order->user_id = $user_id;
-        $order->status = 'created';
+        if($status == ''){ // Дефолтное создание заказа
+            $order->status = 1;
+        } else if ($status == 'reserve'){ // Заказ откладываем в резерв
+            $order->status = 2;
+        }
+        $order->delivery_method = $user->delivery_method;
+        $order->payment_method = $user->payment_method;
+
         $order->save();
         // Получаем id только что созданного заказа
         $created_order_id = $order->id;
@@ -62,6 +73,8 @@ class CartController extends Controller{
             $order_item->save();
             $cart_entry->delete(); // Очистить корзину
         }
+        
+        return $this->redirect(Url::to(['catalog/index']));
 
     }
 

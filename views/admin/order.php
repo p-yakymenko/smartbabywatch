@@ -5,21 +5,6 @@
     use yii\widgets\ActiveForm;
 ?>
 
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Админка</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="<?= Url::to(['admin/products']) ?>">Товары</a></li>
-            <li><a href="<?= Url::to(['admin/orders']) ?>">Заказы</a></li>
-            <li><a href="<?= Url::to(['admin/news']) ?>">Новости</a></li>
-            <li><a href="<?= Url::to(['catalog/index']) ?>">Вернуться на сайт</a></li>
-        </ul>
-    </div>
-</nav>
-
-<div class="container">
         
     <h1>Заказ № <?= $order->id ?></h1>
     <p>Текущий статус: <?= $order_statuses[$order->status] ?></p>
@@ -69,4 +54,3 @@
     <a href="<?= Url::to(['admin/orders']) ?>">
         <div class="btn btn-default">Вернуться</div>
     </a>
-</div>

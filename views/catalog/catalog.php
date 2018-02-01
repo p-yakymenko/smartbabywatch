@@ -65,7 +65,7 @@
 				<div class="col-md-3 col-sm-4">
 					<div class="sidebar wow fadeInLeft" data-wow-delay="0.1s">
 						<div class="sidebar-col-one">
-							<div class="sidebar-menu-title">Товары и заказы</div>
+							<div class="sidebar-menu-title">Т	овары и заказы</div>
 
 							<div class="sidebar-menu">
 								<ul class="sidebar-menu-list">
@@ -73,9 +73,9 @@
 										<li><a href="<?= Url::to(['admin/products']) ?>">Админ панель</a></li>		
 									<?php } ?>
 									<li><a href="<?= Url::to(['cart/view']) ?>">Корзина</a></li>
-									<li><a href="">Каталог товаров</a></li>
-									<li><a href="">Мои заказы</a></li>
-									<li><a href="">Мои резервы</a></li>
+									<li><a href="<?= Url::to(['catalog/index']) ?>">Каталог товаров</a></li>
+									<li><a href="<?= Url::to(['order/myorders']) ?>">Мои заказы</a></li>
+									<li><a href="<?= Url::to(['order/myorders','status'=>'reserved']) ?>">Мои резервы</a></li>
 									<li><a href="">Возврат товара</a></li>
 									<li><a href="">Уведомления о товаре</a></li>
 								</ul>
@@ -87,9 +87,9 @@
 
 							<div class="sidebar-menu sidebar-menu-two">
 								<ul class="sidebar-menu-list">
-									<li><a href="">Доставка и оплата</a></li>
-									<li><a href="">Акции производителей</a></li>
-									<li><a href="">Гарантии и сервис</a></li>
+									<li><a href="<?= Url::to(['catalog/delivery'])?>">Доставка и оплата</a></li>
+									<li><a href="<?= Url::to(['catalog/promotions'])?>">Акции производителей</a></li>
+									<li><a href="<?= Url::to(['catalog/guarantee'])?>">Гарантии и сервис</a></li>
 									<li><a href="<?= Url::to(['catalog/news'])?>">Новости</a></li>
 								</ul>
 							</div>
@@ -100,7 +100,7 @@
 
 							<ul class="sidebar-news">
 								<?php // вывод новостей
-									foreach($news as $news_entry){
+									foreach($sidebar_news as $news_entry){
 									?>
 										<li><span class="sidebar-news-date"><?= $news_entry->created_at ?></span><a href="<?= Url::to(['catalog/newsentry', 'id'=>$news_entry->id]) ?>"  class="sidebar-news-link"><?= $news_entry->title ?></a></li>
 									<?php	

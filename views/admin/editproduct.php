@@ -4,21 +4,6 @@
     use yii\helpers\Url;
 ?>
 
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Админка</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="<?= Url::to(['admin/products']) ?>">Товары</a></li>
-            <li><a href="<?= Url::to(['admin/orders']) ?>">Заказы</a></li>
-            <li><a href="<?= Url::to(['admin/news']) ?>">Новости</a></li>
-            <li><a href="<?= Url::to(['catalog/index']) ?>">Вернуться на сайт</a></li>
-        </ul>
-    </div>
-</nav>
-
-<div class="container">
     ID продукта (системное значение, не подлежит изменению): <?= $item->id ?>
     <?php $form = ActiveForm::begin(); ?>
         <?= $form->field($model, 'name')->label('Название') ?>
@@ -72,6 +57,4 @@
         </div>
 
   </div>
-</div>
-
 </div>

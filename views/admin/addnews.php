@@ -4,21 +4,11 @@
     use yii\helpers\Url;
 ?>
 
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Админка</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="<?= Url::to(['admin/products']) ?>">Товары</a></li>
-            <li><a href="<?= Url::to(['admin/orders']) ?>">Заказы</a></li>
-            <li><a href="<?= Url::to(['admin/news']) ?>">Новости</a></li>
-            <li><a href="<?= Url::to(['catalog/index']) ?>">Вернуться на сайт</a></li>
-        </ul>
-    </div>
-</nav>
-
-<div class="container">
+    <h1>
+        <?php if(isset($name)){
+            echo $name;
+        } ?>
+    </h1>
 
     <?php $form = ActiveForm::begin() ?>
 
@@ -28,10 +18,3 @@
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary']) ?>
 
     <?php ActiveForm::end() ?>
-
-    <hr>
-    <a href="<?= Url::to(['admin/news']) ?>">
-        <div class="btn btn-default">Вернуться</div>
-    </a>
-
-</div>

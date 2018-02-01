@@ -254,5 +254,50 @@ class AdminController extends Controller{
         return $this->render('all_promotions', ['promotions' => $promotions]);
     }
 
+    /* Добавить новую акцию */
+    public function actionAdd_promotion(){
+        $model = new NewsEntryForm(); // Используем ту же модель для формы - нужны одинаковые поля: тайтл и непосредственно текст
+        
+        if($model->load(Yii::$app->request->post()) && $model->validate()){
+            $new_promotion = new Promotions();
+            $new_promotion->title = $model->title;
+            $new_promotion->text = $model->text;
+            $new_promotion->save();
+            return $this->redirect(['admin/display_promotions']);
+        }
+
+        return $this->render('addnews', [
+            'model' => $model,
+            'name' => "Добавить акцию"
+        ]);
+    }
+
+    /* Редактировать существующую акцию */
+    public function actionEdit_promotion($id){
+        $model = new NewsEntryForm(); // Используем ту же форму, что и для новостей
+        $promotion = Promotions::findOne($id);
+        // Если данные даны
+        if($model->load(Yii::$app->request->post()) && $model->validate()){
+            // Сохраняем новые данные
+            $promotion->title = $model->title;
+            $promotion->text = $model->text;
+            $promotion->save();
+            return $this->redirect(['admin/display_promotions']);
+        }
+
+        // Вывод обычной формы        
+        
+        
+        $model->title = $promotion->title;
+        $model->text = $promotion->text;
+        return $this->render('addnews', ['model'=> $model]);
+    }
+
+    /* Удалить существующую акцию */
+    public function actionDelete_promotion($id){
+        $promotion = Promotions::findOne($id);
+        $promotion->delete();
+        return $this->redirect(['admin/display_promotions']);
+    }
 
 }

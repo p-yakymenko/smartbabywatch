@@ -66,7 +66,7 @@
 							<div class="sidebar-menu-title">Товары и заказы</div>
 
 							<div class="sidebar-menu">
-								<ul class="sidebar-menu-list">
+								<	ul class="sidebar-menu-list">
 									<?php $url_to_catalog = Url::to(['product/catalog'])?>
 									<?php $url_to_oreders = Url::to(['product/track'])?>
 									<?php $url_to_rezerv = Url::to(['product/rezerv'])?>

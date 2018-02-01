@@ -135,7 +135,10 @@
 				<a href="<?= Url::to(['cart/createorder']) ?>">
 				<button type="submit" class="btn btn-blue pull-right">Оформить заказ</button></a>
 
-				<button type="submit" class="btn btn-white btn-white-hover pull-right">Отложить в резерв</button>     
+				<!-- ОТЛОЖИТЬ В РЕЗЕРВ -->
+				<a href="<?= Url::to(['cart/createorder', 'status' => 'reserve']) ?>">
+					<button type="submit" class="btn btn-white btn-white-hover pull-right">Отложить в резерв</button>     
+				</a>
 			</div>   
 		
 	</div>

@@ -3,22 +3,6 @@
     use yii\helpers\Url;
 ?>
 
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Админка</a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="<?= Url::to(['admin/products']) ?>">Товары</a></li>
-            <li><a href="<?= Url::to(['admin/orders']) ?>">Заказы</a></li>
-            <li><a href="<?= Url::to(['admin/news']) ?>">Новости</a></li>
-            <li><a href="<?= Url::to(['catalog/index']) ?>">Вернуться на сайт</a></li>
-        </ul>
-    </div>
-</nav>
-
-<div class="container">
-
     <table class="table">
         <?php foreach($news as $news_entry){ ?>
             <tr>
@@ -46,5 +30,3 @@
             Добавить новость
         </div>
     </a>
-
-</div>
