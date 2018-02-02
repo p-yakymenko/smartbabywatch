@@ -12,6 +12,8 @@ use app\models\UserActiveRecord; // Модель для работы с поль
 use app\models\News;
 use app\models\Notifications; // ActiveRecord для таблицы уведомлений
 use app\models\Promotions;
+use app\models\Returns;
+use app\models\ReturnCreateForm;
 
 class CatalogController extends Controller{
 
@@ -120,6 +122,12 @@ class CatalogController extends Controller{
     * Блок уведомлений о товаре
     */
 
+    // Отображение уведомлений
+    public function actionMy_notifications(){
+        
+
+    }
+
     // Добавить в очередь уведомление о товаре
     public function actionNotification_add($item_id){
         $user_id = Yii::$app->user->id;
@@ -134,6 +142,42 @@ class CatalogController extends Controller{
         }
         return $this->redirect(['catalog/index']); // и возвращаемся на страницу каталога
 
+        
+    }
+
+    /*
+    * Блок, отвечающий за возвраты
+    */
+
+    // Создать новый возврат
+    public function actionReturn_create(){
+        $new_return_form = new ReturnCreateForm; // Форма возврата
+        $user_id = Yii::$app->user->id; // Получаем пользователя для представления
+        $user = UserActiveRecord::findOne($user_id);
+        // Получаем последние новости для их вывода на сайдбаре странице
+        $latest_news = News::find()->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
+        
+
+        if($new_return_form->load(Yii::$app->request->post()) && $new_return_form->validate()){ // Если данные введены, добавляем товар для возврата
+            $return = new Returns();
+            $return->order_no = $new_return_form->order_number;
+            $return->item_code = $new_return_form->item_code;
+            $return->item_quantity = $new_return_form->item_quantity;
+            $return->date = $new_return_form->date;
+            $return->reason = $new_return_form->reason;
+            $return->save();
+
+            return $this->render('return_create', [ // И выводим ту же странцу с надписью "всё успешно"
+                'model' => $new_return_form,
+                'user' => $user,
+                'sidebar_news' => $latest_news,
+                'status_message' => 'Спасибо, заявка на возврат успешно создана!'
+            ]); 
+        } else { // Если данные введены не были, отображаем форму создания возврата
+            return $this->render('return_create', ['model' => $new_return_form, 'user' => $user, 'sidebar_news' => $latest_news]);
+        }
+        
+        
         
     }
 
