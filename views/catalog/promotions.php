@@ -69,8 +69,9 @@
 								<li><a href="<?= Url::to(['catalog/index']) ?>">Каталог товаров</a></li>
 								<li><a href="<?= Url::to(['order/myorders']) ?>">Мои заказы</a></li>
 								<li><a href="<?= Url::to(['order/myorders','status'=>'reserved']) ?>">Мои резервы</a></li>
-								<li><a href="">Возврат товара</a></li>
-								<li><a href="">Уведомления о товаре</a></li>
+								<li><a href="<?= Url::to(['catalog/return_create']) ?>">Возврат товара</a></li>
+								<li><a href="<?= Url::to(['catalog/my_notifications']) ?>">Уведомления о товаре</a></li>
+							
 							</ul>
 							</div>
 						</div>

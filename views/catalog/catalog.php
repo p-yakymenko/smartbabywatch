@@ -2,6 +2,7 @@
 	use yii\helpers\Html;
 	use yii\helpers\Url;
 	use yii\widgets\LinkPager;
+	use yii\widgets\ActiveForm;
 ?>
 
 
@@ -65,7 +66,7 @@
 				<div class="col-md-3 col-sm-4">
 					<div class="sidebar wow fadeInLeft" data-wow-delay="0.1s">
 						<div class="sidebar-col-one">
-							<div class="sidebar-menu-title">Т	овары и заказы</div>
+							<div class="sidebar-menu-title">Товары и заказы</div>
 
 							<div class="sidebar-menu">
 								<ul class="sidebar-menu-list">
@@ -77,7 +78,7 @@
 									<li><a href="<?= Url::to(['order/myorders']) ?>">Мои заказы</a></li>
 									<li><a href="<?= Url::to(['order/myorders','status'=>'reserved']) ?>">Мои резервы</a></li>
 									<li><a href="<?= Url::to(['catalog/return_create']) ?>">Возврат товара</a></li>
-									<li><a href="">Уведомления о товаре</a></li>
+									<li><a href="<?= Url::to(['catalog/my_notifications']) ?>">Уведомления о товаре</a></li>
 								</ul>
 							</div>
 						</div>
@@ -120,7 +121,7 @@
 
 	
 <h3 class="catalog-title">
-	Каталог товаров<br><span>Количество артикулов: <?= count($items) ?></span>
+	Каталог товаров<br><span>Всего предметов в магазине: <?= $total_items_count ?></span>
 </h3>
 
 <div class="form">
@@ -155,15 +156,15 @@
 		
 	</form>
 
-	<div class="form-params">
+	<!-- <div class="form-params">
 		<div class="form-params-reset">
 			<a href=""><img src="style/img/icons/x.png" alt=""> Сбросить фильтр</a>
 		</div>
-	</div>
+	</div> -->
 </div>
 
 <div class="catalog-filter">
-	<div class="catalog-filter-field1">
+	<!-- <div class="catalog-filter-field1">
 		<div class="checkbox checkbox-primary">
             <input id="checkbox1" type="checkbox">
             <label for="checkbox1">
@@ -178,7 +179,33 @@
                 Только товары в наличии
             </label>
         </div>
+		
+	</div> -->
+	
+	<!-- ФОРМА ФИЛЬТРА -->
+	<?php $catalog_filter = ActiveForm::begin([
+				'action' => Url::to(['catalog/index']),
+				'method' => 'GET'
+			]); ?>
+		<div class="catalog-filter-field1">
+		
+		
+		<?= $catalog_filter->field($catalog_filter_form, 'items_with_photo')->checkbox([], false)->label('Только товары с фото') ?>
+
+		</div>
+		<div class="catalog-filter-field2">
+		
+            <?= $catalog_filter->field($catalog_filter_form, 'items_available')->checkbox([], false)->label('Только товары в наличии') ?>
+        
+		
 	</div>
+		
+		
+		<?= Html::submitButton('Применить фильтр', ['class'=> 'btn btn-primary pull-left']) ?>
+	<?php ActiveForm::end(); ?>
+	<!-- КОНЕЦ ФОРМЫ ФИЛЬТРА -->
+	<hr>
+			
 	<div class="catalog-filter-field3">
 		<span>Вид отображения:</span>
 

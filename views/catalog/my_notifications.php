@@ -1,5 +1,7 @@
 <?php
-    use yii\helpers\Url;
+	use yii\helpers\Html;
+	use yii\helpers\Url;
+	use yii\widgets\LinkPager;
 ?>
 
 
@@ -21,6 +23,12 @@
 			<span class="header-work">Пн-Пт с 8:30 до 17:30 по МСК</span>
 			<span class="header-work">Сб и Вс – выходной</span>
 		</div>
+		<div class="header-col-login" >
+		<?php $url_to_reg = Url::to(['secure/register'])?>
+		<?php $url_to_log = Url::to(['secure/login'])?>
+			<a href="<?= $url_to_log ?>"><img src="style/img/icons/out.png" alt="">Вход</a>
+			<a href="<?= $url_to_reg ?>"><img src="style/img/icons/user.png" alt="">Регистрация</a>
+		</div>
 		<div class="header-col-basket" style="display: none">
 			<div class="header-basket">
 				<div class="header-basket-ico">
@@ -36,7 +44,9 @@
 	</div>
 </header>
 	
+
 	<section class="section-catalog">
+	
 	<div class="container">
 		<div class="catalog-user-menu">
 			<div class="catalog-user-left">
@@ -45,8 +55,8 @@
 				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 			</div>
 			<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
-				<span>Добро пожаловать, <?= $user->name ?> <?= $user->surname ?></span>
-				<a href="">Выйти</a>
+				<span>Добро пожаловать, <?= $user->name ?> <?= $user->surname?></span>
+				<a href="<?= Url::to(['secure/logout']) ?>">Выйти</a>
 			</div>
 		</div>
 		 
@@ -55,20 +65,20 @@
 				<div class="col-md-3 col-sm-4">
 					<div class="sidebar wow fadeInLeft" data-wow-delay="0.1s">
 						<div class="sidebar-col-one">
-							<div class="sidebar-menu-title">Товары и заказы</div>
+							<div class="sidebar-menu-title">Т	овары и заказы</div>
 
 							<div class="sidebar-menu">
-							<ul class="sidebar-menu-list">
-								<?php if($user->isAdmin()){ ?>
-									<li><a href="<?= Url::to(['admin/products']) ?>">Админ панель</a></li>		
-								<?php } ?>
-								<li><a href="<?= Url::to(['cart/view']) ?>">Корзина</a></li>
-								<li><a href="<?= Url::to(['catalog/index']) ?>">Каталог товаров</a></li>
-								<li><a href="<?= Url::to(['order/myorders']) ?>">Мои заказы</a></li>
-								<li><a href="<?= Url::to(['order/myorders','status'=>'reserved']) ?>">Мои резервы</a></li>
-								<li><a href="<?= Url::to(['catalog/return_create']) ?>">Возврат товара</a></li>
-								<li><a href="<?= Url::to(['catalog/my_notifications']) ?>">Уведомления о товаре</a></li>
-							</ul>
+								<ul class="sidebar-menu-list">
+									<?php if($user->isAdmin()){ ?>
+										<li><a href="<?= Url::to(['admin/products']) ?>">Админ панель</a></li>		
+									<?php } ?>
+									<li><a href="<?= Url::to(['cart/view']) ?>">Корзина</a></li>
+									<li><a href="<?= Url::to(['catalog/index']) ?>">Каталог товаров</a></li>
+									<li><a href="<?= Url::to(['order/myorders']) ?>">Мои заказы</a></li>
+									<li><a href="<?= Url::to(['order/myorders','status'=>'reserved']) ?>">Мои резервы</a></li>
+									<li><a href="<?= Url::to(['catalog/return_create']) ?>">Возврат товара</a></li>
+									<li><a href="">Уведомления о товаре</a></li>
+								</ul>
 							</div>
 						</div>
 						
@@ -108,106 +118,59 @@
 
 					
 
-	<div class="catalog-title-with">
-	<div class="catalog-title-with-left">
-		<h3 class="catalog-title">
-			<?php if(!isset($name)){ ?>
-				Мои заказы
-			<?php } else { ?>
-				Резервы
-			<?php } ?>
-		</h3>
-	</div>
-	<div class="catalog-title-with-right">
-		<a href="" class="track-order-link"><img src="style/img/icons/location.png" alt=""> Отследить заказ</a>
-	</div>
-</div>
-
-<?php if(!isset($name)) { ?>
-<ul  class="nav nav-pills nav-pills-merge margin-small nav-pills-merge-block">
-	<?php if(!isset($_GET['archive'])){ // Если это не архивная страница ?> 
-		<li class="active">
-			<a href="<?= Url::to(['order/myorders']) ?>">Активные</a>
-		</li>
-		<li class="">
-			<a href="<?= Url::to(['order/myorders', 'archive' => 1]) ?>">Архивные</a>
-		</li>
-	<?php } else { // Если это архивная страница ?>
-		<li class="">
-			<a href="<?= Url::to(['order/myorders']) ?>">Активные</a>
-		</li>
-		<li class="active">
-			<a href="<?= Url::to(['order/myorders', 'archive' => 1]) ?>">Архивные</a>
-		</li>
-	<?php } // Конец условия ?>
 	
-</ul>
-<?php } ?>
-
-<?php // Вывод таблицы заказов ?>
-<div class="table-responsive">
-	<table class="catalog-table table vertical-aling gray">
-		<thead>
-			<tr>
-				<th class=""><div>№ заказа</div></th>
-				<th class=""><div>Дата и время</div></th>
-				<th class=""><div>Способ доставки</div></th>
-				<th class=""><div>Способ оплаты</div></th>
-				<th class="last"><div>Статус</div></th>
-				<th class=""></th>
-			</tr>
-		</thead>
-		<tbody>
-            <?php foreach($orders as $order){ ?>
-                <tr>
-                    <td><?= $order->id ?></td>
-                    <td><?= $order->created_at ?></td>
-                    <td>
-						
-                        <?php
-							$delivery_method_id = $order->delivery_method;
-							echo $delivery_methods[$delivery_method_id];
-							
-							
-                        ?>   
-                    </td>
-                    <td>
-                        <?php
-                            // Способ оплаты
-                            echo $payment_methods[$order->payment_method];
-                        ?>
-                    </td>
-                    <td>
-                        <?php
-                            // Статус Заказа
-                            echo $order_status[$order->status];
-                        ?>
-                    </td>
-                    <td class="noborder tadle-field-edit">
-					    <ul class="table-edit">
-						    <li>
-							    <a href="<?= Url::to(['order/deleteorder', 'id'=>$order->id ]) ?>"><img src="style/img/icons/delete.png" alt=""></a>
-						    </li>
-						    <li>
-							    <a href="<?= Url::to(['catalog/edit_order', 'id'=>$order->id]) ?>">
-									<img src="style/img/icons/edit.png" alt="">
-								</a>
-						    </li>
-					</ul>
-				</td>
-                </tr>
-
-            <?php } // конец цикла вывода заказов ?>
-			</tbody>
-	</table>
-</div>
-
-						</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
+                    <h3 class="catalog-title">
+                    Уведомления о товаре <span>123 товара</span>
+                </h3>
+                
+                <div class="table-responsive">
+                                        <table class="catalog-table table vertical-aling gray">
+                                            <thead>
+                                                <tr>
+                                                    <th class=""><div>Код</div></th>
+                                                    <th class=""><div>Наименование товара</div></th>
+                                                    <th class=""><div>Бренд</div></th>
+                                                    <th class=""><div>Цена</div></th>
+                                                    <th class="last"><div>Кол-во</div></th>
+                                                    <th class=""></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach($notifications as $notification){ ?>
+                                                <tr>
+                                                    <td><?= $items[$notification->item_id]['code'] ?></td>
+                                                    <td>
+                                                        <div class="tovar-name">
+                                                            <?= Html::img([$items[$notification->item_id]['picture']]) ?>
+                                                            <a href="" class="tovar-name-title"><?= $items[$notification->item_id]['name'] ?></a>
+                                                        </div>
+                                                    </td>
+                                                    <td>Smart Baby</td>
+                                                    <td><?= $items[$notification->item_id]['price'] ?> руб</td>
+                                                    <td>
+                                                        <?= $items[$notification->item_id]['quantity'] ?>
+                                                    </td>
+                                                    <td class="noborder tadle-field-edit">
+                                                        <ul class="table-edit">
+                                                            <li>
+                                                                <a href="<?= Url::to(['catalog/notification_remove', 'id' => $notification->id]) ?>"><img src="style/img/icons/delete.png" alt=""></a>
+                                                            </li>
+                                                            
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <?php } // Конец цикла вывода уведомлений?>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
 	<footer class="section-footer clearfix">
 	<div class="container">

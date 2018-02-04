@@ -14,6 +14,12 @@ use app\models\Notifications; // ActiveRecord для таблицы уведом
 use app\models\Promotions;
 use app\models\Returns;
 use app\models\ReturnCreateForm;
+use app\models\Orders;
+use app\models\OrderItems;
+use app\models\Delivery_method;
+use app\models\Payment_method;
+use app\models\Order_status;
+use app\models\CatalogFilterForm;
 
 class CatalogController extends Controller{
 
@@ -24,6 +30,19 @@ class CatalogController extends Controller{
     */
     public function actionIndex(){
         
+        $catalog_filter_form = new CatalogFilterForm;
+        if($catalog_filter_form->load(Yii::$app->request->get()) && $catalog_filter_form->validate()){ // если форма в каталоге была использована
+            // Получаем из базы информацию про товары с использованием информации из фильтра
+            $where_clause = [];
+            if($catalog_filter_form->items_available == 1){
+                $where_clause = ['>', 'quantity', '0'];
+            }
+            $query = Items::find()->where($where_clause); // дальше $query используется при построении пагинации
+        } else {
+            // Получаем информацию обо всех товарах
+            $query = Items::find(); // дальше $query используется при построении пагинации
+        }
+
         $user_id = Yii::$app->user->id; // Получаем информацию о пользователе для дальнейшей работы
 
         // Заглушка на случай, если сюда попал не залогиненный пользователь
@@ -51,8 +70,7 @@ class CatalogController extends Controller{
         
         
 
-        // Получаем из базы информацию для представления
-        $query = Items::find();
+        
         // Делаем пагинацию
         $count_for_pagination = $query->count();
         $pagination = new Pagination(['totalCount' => $count_for_pagination]);
@@ -61,7 +79,85 @@ class CatalogController extends Controller{
 
         $user = UserActiveRecord::findOne($user_id);
         
-        return $this->render('catalog', ['items' => $items, 'user' => $user, 'sidebar_news' => $latest_news, 'pagination' => $pagination]);
+        $total_items_count = Items::find()->count(); // Получаем общее количество итемов в магазине для дальнейшего отображения
+
+        return $this->render('catalog', [
+            'items' => $items, 
+            'user' => $user,
+            'sidebar_news' => $latest_news,
+            'pagination' => $pagination,
+            'total_items_count' => $total_items_count, // Всего итемов в магазине
+            'catalog_filter_form' => $catalog_filter_form
+        ]);
+    }
+
+    /*
+    * Блок действий, обрабатывающих заказы
+    */
+
+    // Просмотр/изменение одного заказа
+    public function actionEdit_order($id){
+        // Получаем информацию о заказе
+        $order = Orders::findOne($id);
+
+        // Получаем информацию об итемах, входящих в заказ
+        $ordered_items = OrderItems::find()->where(['order_id' => $order->id])->all();
+
+        // Получаем информацию обо всех итемах
+        $items_data = Items::find()->all();
+        foreach($items_data as $item_data_entry){ // Собираем информацию об итемах в ассоциативный массив
+            $item_array[$item_data_entry->id]['name'] = $item_data_entry['name'];
+            $item_array[$item_data_entry->id]['price'] = $item_data_entry['price'];
+            $item_array[$item_data_entry->id]['code'] = $item_data_entry['code'];
+            $item_array[$item_data_entry->id]['brand'] = $item_data_entry['brand'];
+            $item_array[$item_data_entry->id]['quantity'] = $item_data_entry['quantity'];
+            $item_array[$item_data_entry->id]['picture'] = $item_data_entry['picture'];
+
+        } // Конец цикла сбора информации о предметах
+        
+        // Получаем информацию о способах доставки
+        $delivery_methods = Delivery_method::find()->all();
+        foreach($delivery_methods as $delivery_method){ // !! Собираем информацию в ассоциативный массив
+            $delivery_methods_array[$delivery_method->id] = $delivery_method->ru;
+        }
+
+        // Получаем информацию о способах оплаты
+        $payment_methods = Payment_method::find()->all();        
+        foreach($payment_methods as $payment_method){ // !! СОбираем информацию в ассоциативный массив
+            $payment_methods_array[$payment_method->id] = $payment_method->ru;
+        }
+
+        // Получаем инфморацию о статусах заказов
+        $order_statuses = Order_status::find()->all();
+        foreach($order_statuses as $order_status){
+            $order_status_array[$order_status->id] = $order_status->ru;
+        }
+
+        // Получаем информацию о пользователе для представления
+        $user_id = Yii::$app->user->id;
+        $user = UserActiveRecord::findOne($user_id);
+
+        // Получаем последние новости для их вывода на странице
+        $latest_news = News::find()->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
+        
+        return $this->render('edit_order', [
+            'user' => $user,
+            'sidebar_news' => $latest_news,
+            'order' => $order,
+            'ordered_items' => $ordered_items,
+            'item_data' => $item_array,
+            'payment_methods' => $payment_methods_array,
+            'delivery_methods' => $delivery_methods_array,
+            'order_statuses' => $order_status_array
+        ]);
+    }
+
+    // Подтвердить зарезервированный заказ
+    public function actionReserve_to_confirmed($id){
+        $order = Orders::findOne($id); // Находим заказ
+        $order->status = 1; // Заменяем статус на создан
+        $order->save(); // Сохраняем заказ
+        return $this->redirect(['order/myorders']); // Возвращаемся на страницу заказов
     }
 
     /*
@@ -124,8 +220,32 @@ class CatalogController extends Controller{
 
     // Отображение уведомлений
     public function actionMy_notifications(){
+        $user_id = Yii::$app->user->id; // Получаем пользователя для представления
+        $user = UserActiveRecord::findOne($user_id);
+        // Получаем последние новости для их вывода на сайдбаре странице
+        $latest_news = News::find()->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
+        $notifications = Notifications::find()->where(['user_id' => $user_id])->all();
+        $items = Items::find()->all();
         
+        // Формиурем массив данных по товарам
+        foreach($items as $item){
+            $item_array[$item->id]['name'] = $item->name;
+            $item_array[$item->id]['price'] = $item->price;
+            $item_array[$item->id]['code'] = $item->code;
+            $item_array[$item->id]['brand'] = $item->brand;
+            $item_array[$item->id]['quantity'] = $item->quantity;
+            $item_array[$item->id]['picture'] = $item->picture;
 
+        }
+
+        return $this->render('my_notifications', [
+                'user' => $user,
+                'sidebar_news' => $latest_news,
+                'notifications' => $notifications,
+                'items' => $item_array
+
+            ]);
+        
     }
 
     // Добавить в очередь уведомление о товаре
@@ -143,6 +263,14 @@ class CatalogController extends Controller{
         return $this->redirect(['catalog/index']); // и возвращаемся на страницу каталога
 
         
+    }
+
+    // Удалить уведомление
+    public function actionNotification_remove($id){
+        $notification = Notifications::findOne($id);
+        $notification->delete();
+        return $this->redirect(['catalog/my_notifications']);
+
     }
 
     /*

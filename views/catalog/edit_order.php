@@ -2,6 +2,7 @@
     use yii\helpers\Url;
 ?>
 
+<!-- НАЧАЛО ХЕДЕРА -->
 
 <header class="header">
 	<div class="container header-container">
@@ -36,6 +37,10 @@
 	</div>
 </header>
 	
+<!-- КОНЕЦ ХЕДЕРА -->
+
+<!-- НАЧАЛО САЙДБАРА -->
+
 	<section class="section-catalog">
 	<div class="container">
 		<div class="catalog-user-menu">
@@ -104,103 +109,72 @@
 					<div class="catalog-content wow fadeIn" data-wow-delay="0.3s">
 						
 
-						
+<!-- КОНЕЦ САЙДБАРА -->						
 
 					
 
 	<div class="catalog-title-with">
 	<div class="catalog-title-with-left">
 		<h3 class="catalog-title">
-			<?php if(!isset($name)){ ?>
-				Мои заказы
-			<?php } else { ?>
-				Резервы
-			<?php } ?>
+			Заказ № <?= $order->id ?>
 		</h3>
-	</div>
-	<div class="catalog-title-with-right">
-		<a href="" class="track-order-link"><img src="style/img/icons/location.png" alt=""> Отследить заказ</a>
+        Способ доставки: <?= $delivery_methods[$order->delivery_method ]?><br>
+        Способ оплаты: <?= $payment_methods[$order->payment_method ]?><br>
+        Статус: <?= $order_statuses[$order->status] ?>
 	</div>
 </div>
-
-<?php if(!isset($name)) { ?>
-<ul  class="nav nav-pills nav-pills-merge margin-small nav-pills-merge-block">
-	<?php if(!isset($_GET['archive'])){ // Если это не архивная страница ?> 
-		<li class="active">
-			<a href="<?= Url::to(['order/myorders']) ?>">Активные</a>
-		</li>
-		<li class="">
-			<a href="<?= Url::to(['order/myorders', 'archive' => 1]) ?>">Архивные</a>
-		</li>
-	<?php } else { // Если это архивная страница ?>
-		<li class="">
-			<a href="<?= Url::to(['order/myorders']) ?>">Активные</a>
-		</li>
-		<li class="active">
-			<a href="<?= Url::to(['order/myorders', 'archive' => 1]) ?>">Архивные</a>
-		</li>
-	<?php } // Конец условия ?>
-	
-</ul>
-<?php } ?>
-
-<?php // Вывод таблицы заказов ?>
+<br>
+<!-- НАЧАЛО ТАБЛИЦЫ -->
 <div class="table-responsive">
 	<table class="catalog-table table vertical-aling gray">
 		<thead>
 			<tr>
-				<th class=""><div>№ заказа</div></th>
-				<th class=""><div>Дата и время</div></th>
-				<th class=""><div>Способ доставки</div></th>
-				<th class=""><div>Способ оплаты</div></th>
-				<th class="last"><div>Статус</div></th>
-				<th class=""></th>
+				<th class=""><div>Предмет</div></th>
+				<th class=""><div>Количество</div></th>
+				<th class=""><div>Цена за единицу</div></th>
+				<th class=""><div>Стоимость</div></th>
 			</tr>
 		</thead>
 		<tbody>
-            <?php foreach($orders as $order){ ?>
+            <?php 
+            $total_cost = 0;
+            foreach($ordered_items as $ordered_item){ ?>
                 <tr>
-                    <td><?= $order->id ?></td>
-                    <td><?= $order->created_at ?></td>
-                    <td>
-						
-                        <?php
-							$delivery_method_id = $order->delivery_method;
-							echo $delivery_methods[$delivery_method_id];
-							
-							
-                        ?>   
+                    <td><!-- Название -->
+                        <?= $item_data[$ordered_item->item_id]['name'] ?>
                     </td>
-                    <td>
-                        <?php
-                            // Способ оплаты
-                            echo $payment_methods[$order->payment_method];
-                        ?>
+                    <td><!-- Количество предметов -->
+                        
+                        <?= $ordered_item->quantity ?>
+                        
                     </td>
-                    <td>
-                        <?php
-                            // Статус Заказа
-                            echo $order_status[$order->status];
-                        ?>
+                    <td><!-- Цена за единицу -->
+                        <?= $item_data[$ordered_item->item_id]['price'] ?>
                     </td>
-                    <td class="noborder tadle-field-edit">
-					    <ul class="table-edit">
-						    <li>
-							    <a href="<?= Url::to(['order/deleteorder', 'id'=>$order->id ]) ?>"><img src="style/img/icons/delete.png" alt=""></a>
-						    </li>
-						    <li>
-							    <a href="<?= Url::to(['catalog/edit_order', 'id'=>$order->id]) ?>">
-									<img src="style/img/icons/edit.png" alt="">
-								</a>
-						    </li>
-					</ul>
-				</td>
+                    <td><!-- Общая стоимость -->
+                        <?= $ordered_item->quantity*$item_data[$ordered_item->item_id]['price'] ?>
+                    </td>
+                   
                 </tr>
-
-            <?php } // конец цикла вывода заказов ?>
-			</tbody>
+            <?php 
+                $total_cost += $ordered_item->quantity*$item_data[$ordered_item->item_id]['price'];
+            } // Конец цикла ?>
+		</tbody>
 	</table>
+
 </div>
+<!-- КОНЕЦ ТАБЛИЦЫ -->
+Общая стоимость: <b><?= $total_cost ?></b> рублей
+<br>
+<?php // Для зарезервированных заказов - кнопка подтвердить
+if($order->status == 2){
+    ?>
+        <a href="<?= Url::to(['catalog/reserve_to_confirmed', 'id' => $order->id]) ?>">
+            <div class="btn btn-default">Подтвердить</div>
+        </a>
+    <?php
+} // Конец блока показа кнопки "подтвердить зарезервированный заказ"
+?>
 
 						</div>
 				</div>

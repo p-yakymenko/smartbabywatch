@@ -17,7 +17,7 @@ class OrderController extends Controller{
 
     public $layout = 'generic';
 
-    public function actionMyorders($status = ''){
+    public function actionMyorders($status = '', $archive = 0){
         // Получить id пользователя
         $user_id = Yii::$app->user->id;
         $user = UserActiveRecord::findOne($user_id);
@@ -25,6 +25,10 @@ class OrderController extends Controller{
             $order_list = Orders::find()->where(['user_id' => $user_id, 'status' => 2])->all();
         } else {
             $order_list = Orders::find()->where(['user_id' => $user_id])->all();
+        }
+
+        if($archive == 1){ // Вывод архивных заказов
+            $order_list = Orders::find()->where(['user_id' => $user_id, 'status' => 9])->all();
         }
         
         $payment_methods = Payment_method::find()->all();

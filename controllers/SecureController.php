@@ -13,7 +13,7 @@ use yii\captcha\CaptchaAction;
 class SecureController extends Controller{
     
     public $layout = 'generic';
-
+    // Регистрация нового юзера
     public function actionRegister(){
         $model = new UserRegisterForm;
         
