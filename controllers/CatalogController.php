@@ -57,9 +57,10 @@ class CatalogController extends Controller{
         $request = Yii::$app->request;
         $item_to_add = $request->get('id');
         
+        // Добавление товара в корзину
         if(!empty($item_to_add)){ // Если задан товар, который нужно добавить
             // Проверить - есть ли такой товар в корзине. Если есть - увеличить его количество
-                        
+            
             // Добавляем товар
             $cart_item = new Cart;
             $cart_item->user_id = $user_id;
@@ -307,6 +308,24 @@ class CatalogController extends Controller{
         
         
         
+    }
+
+    /*
+    * Блок управления профилем
+    */
+
+    public function actionDelivery_settings($delivery_method = ''){
+        $user_id = Yii::$app->user->id;
+        $user = UserActiveRecord::findOne($user_id);
+        
+        if(empty($delivery_method)){ // если мы переходим по пустой ссылке, получаем активный способ доставки по юзеру из базы и делаем перенаправление
+            $user_delivery_method = $user->delivery_method;
+            return $this->redirect(['catalog/delivery_settings', 'delivery_method' => $user_delivery_method]);
+        }
+        
+        return $this->render('profile', [
+            'delivery_method' => $delivery_method
+        ]);
     }
 
     /*

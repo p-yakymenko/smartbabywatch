@@ -173,37 +173,50 @@
         </div>
 	</div>
 	<div class="catalog-filter-field2">
-		<div class="checkbox checkbox-primary">
+		<div class="checkbox checkbox-primary" onclick="filterAvailable()">
             <input id="checkbox2" type="checkbox" checked>
             <label for="checkbox2">
                 Только товары в наличии
             </label>
         </div>
-		
 	</div> -->
 	
 	<!-- ФОРМА ФИЛЬТРА -->
 	<?php $catalog_filter = ActiveForm::begin([
 				'action' => Url::to(['catalog/index']),
-				'method' => 'GET'
+				'method' => 'GET',
+				
 			]); ?>
-		<div class="catalog-filter-field1">
 		
-		
-		<?= $catalog_filter->field($catalog_filter_form, 'items_with_photo')->checkbox([], false)->label('Только товары с фото') ?>
-
+		<div style="display: inline-block">
+			<div onclick="testFunction()">
+				<?= $catalog_filter->field($catalog_filter_form, 'items_with_photo')->checkbox([], false)->label('Только товары с фото') ?>
+			</div>
 		</div>
-		<div class="catalog-filter-field2">
+		&nbsp
+		<div style="display: inline-block">
+			<div onclick="testFunction()">
+            	<?= $catalog_filter->field($catalog_filter_form, 'items_available')->checkbox([], false)->label('Только товары в наличии') ?>
+			</div>
+		</div>
 		
-            <?= $catalog_filter->field($catalog_filter_form, 'items_available')->checkbox([], false)->label('Только товары в наличии') ?>
-        
 		
-	</div>
+		<div style="display: none">
+			<?= Html::submitButton('Применить фильтр', ['class'=> 'btn btn-primary pull-left', 'id' => 'testclickbutton']) ?>
+		</div>
 		
+		<script>
+			function testFunction(){
+				var submitButtonId = document.getElementById('testclickbutton');
+				submitButtonId.click();
+			}
+
+		</script>
 		
-		<?= Html::submitButton('Применить фильтр', ['class'=> 'btn btn-primary pull-left']) ?>
 	<?php ActiveForm::end(); ?>
+	
 	<!-- КОНЕЦ ФОРМЫ ФИЛЬТРА -->
+	
 	<hr>
 			
 	<div class="catalog-filter-field3">
@@ -288,55 +301,59 @@
 				</table>
 			</div>
 	</div>
-
+	<!-- ВТОРАЯ ВКЛАДКА -->
 	<div class="tab-pane" id="2b">
+	<?php foreach($items as $item){ ?>	
+		<?php if($item->quantity < 1){ //Если товар недоступен ?>
 		<div class="catalog-list">
 			<div class="catalog-list-item catalog-list-item-disable">
 				<div class="catalog-list-field-img">
-					<a href=""><img src="style/img/news.png" alt=""></a>
+					<a href=""><?= Html::img($item->picture) ?></a>
 				</div>
 				<div class="catalog-list-field-text">
-					<h3 class="catalog-list-title"><a href="">Часы детские Smart Baby Watch Q50 (синие)</a></h3>
+					<h3 class="catalog-list-title"><a href=""><?= $item->name ?></a></h3>
 					<ul class="catalog-list-details">
-						<li class="catalog-list-details-item">Код товара: <span>123</span></li>
-						<li class="catalog-list-details-item">Код товара: <span>123</span></li>
+						<li class="catalog-list-details-item">Код товара: <span><?= $item->code ?> </span></li>
 						<li><span class="tovar-status tovar-status-none">не доступно</span></li>
 					</ul>
 				</div>
 				<div class="catalog-list-field-buttons">
-					<div class="catalog-list-price">123,45 руб</div>
+					<div class="catalog-list-price"><?= $item->price ?> руб</div>
 					<div class="catalog-list-tocat">
-						<a href="" class="catalog-list-notify">Уведомить о наличии</a>
+					<a href="<?= Url::to(['catalog/notification_add', 'item_id' => $item->id ]) ?>" class="catalog-list-notify">Уведомить о наличии</a>
 
-						<button type="submit" class="btn btn-blue btn-cat">В корзину</button>
 					</div>
 				</div>
 			</div>
+		<?php } else { // если товар доступен ?>
 			<div class="catalog-list-item">
 				<div class="catalog-list-field-img">
-					<a href=""><img src="style/img/news.png" alt=""></a>
+					<a href=""><?= Html::img($item->picture) ?></a>
 				</div>
 				<div class="catalog-list-field-text">
-					<h3 class="catalog-list-title"><a href="">Часы детские Smart Baby Watch Q50 (синие)</a></h3>
+					<h3 class="catalog-list-title"><a href=""><?= $item->name ?></a></h3>
 					<ul class="catalog-list-details">
-						<li class="catalog-list-details-item">Код товара: <span>123</span></li>
-						<li class="catalog-list-details-item">Код товара: <span>123</span></li>
-						<li><span class="tovar-status tovar-status-none">не доступно</span></li>
+						<li class="catalog-list-details-item">Код товара: <span><?= $item->code ?></span></li>
+						<li><span class="tovar-status">В наличии</span></li>
 					</ul>
 				</div>
 				<div class="catalog-list-field-buttons">
-					<div class="catalog-list-price">123,45 руб</div>
+					<div class="catalog-list-price"><?= $item->price ?>руб</div>
 					<div class="catalog-list-tocat">
 						<div class="tovar-buy-input tovar-buy-input-31">
 							<span>-</span>
 							<input type="text" value="1">
 							<span>+</span>
 						</div>
-
-						<button type="submit" class="btn btn-blue btn-cat">В корзину</button>
+						<a href="<?= Url::current(['id'=>$item->id]) ?>">
+							<button type="submit" class="btn btn-blue btn-cat">В корзину</button>
+						</a>
 					</div>
 				</div>
 			</div>
+		<?php 
+			} // end else
+		} // end foreach ?>
 		</div>
 	</div>
 </div>
