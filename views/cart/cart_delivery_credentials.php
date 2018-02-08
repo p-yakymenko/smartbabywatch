@@ -1,5 +1,7 @@
 <?php
-    use yii\helpers\Url;
+	use yii\helpers\Html;
+	use yii\helpers\Url;
+	use yii\widgets\ActiveForm;
 ?>
 
 <header class="header">
@@ -90,6 +92,7 @@
                     <!-- КОНЕЦ МЕНЮ ВЫБОРА МЕТОДА ДОСТАВКИ -->
 					
 					<div class="tab-content clearfix">
+						
 						<!-- САМОВЫВОЗ -->
                         <?php if($delivery_method == 1){ ?>
                         <div class="tab-pane active">
@@ -100,32 +103,23 @@
 								</div>
 								
 							</div>
-							
-							
-							
-							<div class="row form-group">
-								
-								<div class="col-md-8">
-									<label>ФИО получателя <span class="form-label-important">*</span></label>
-									<input type="text" class="form-control form-input">
-								</div>
-							</div>
-							<div class="row form-group">
-								<div class="col-md-8">
-									<label>Телефон получателя <span class="form-label-important">*</span></label>
-									<input type="text" class="form-control form-input">
-								</div>
-							</div>
+
+							<?php $pickup_form = ActiveForm::begin(); ?>
+
+								<?= $pickup_form->field($pickup_form_model,'delivery_fio')->label('ФИО получателя<span class="form-label-important">*</span></label>') ?>
+
+								<?= $pickup_form->field($pickup_form_model, 'delivery_phone')->label('Телефон получателя<span class="form-label-important">*</span></label>') ?>
+
+								<?= $pickup_form->field($pickup_form_model, 'delivery_comment')->textarea()->label('Комментарий<span class="form-label-important">*</span></label>') ?>
+
+								<?= Html::submitButton('Сохранить', ['class' => 'btn btn-default']) ?>
 
 
-							<div class="form-group">
-								<label>Комментарий</label>
-								<textarea class="form-control form-input" rows="8"></textarea>
-							</div>
+							<?php ActiveForm::end(); ?>
 
 						</div>
                         <?php } // end if ?>
-                        <!-- Конец самовывоза -->
+                        <!-- КОНЕЦ САМОВЫВОЗА -->
                         
                         <!-- АДРЕСНАЯ ДОСТАВКА -->
 						

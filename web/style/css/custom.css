@@ -1181,7 +1181,8 @@ a {
     -webkit-flex-shrink: 0;
         -ms-flex-negative: 0;
             flex-shrink: 0;
-    margin-right: 17px; }
+    margin-right: 17px; 
+    width: 30px; }
   .tovar-name-auto {
     max-width: none;
     -webkit-box-align: center;

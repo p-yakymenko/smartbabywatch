@@ -11,6 +11,9 @@ use app\models\UserActiveRecord;
 use app\models\Items;
 use app\models\Orders;
 use app\models\OrderItems;
+use app\models\DeliveryInfoPickup; // Форма ввода данных для самовывоза
+use app\models\DeliveryInfoAddress; // Форма ввода данных для адресной доставки
+use app\models\DeliveryInfoCourier; // Форма ввода данных для доставки в другой город
 
 class CartController extends Controller{
 
@@ -42,6 +45,20 @@ class CartController extends Controller{
         $cart_entry = Cart::findOne($id);
         $cart_entry->delete();
         return $this->redirect(Url::to(['cart/view']));
+    }
+
+    // Ввод и утверждение данных для доставки
+    // Вызывается из окна корзины по нажатию "оформить заказ" или "в резерв"
+    public function actionDelivery_credentials($status=''){
+        // Собираем формы данных о доставке
+        // ....
+        $delivery_info_form_pickup = new DeliveryInfoPickup();
+
+        return $this->render('cart_delivery_credentials', [
+            'pickup_form' => $delivery_info_form_pickup
+        ]);
+
+
     }
 
     public function actionCreateorder($status = ''){

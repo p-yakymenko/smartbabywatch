@@ -51,7 +51,8 @@
 	<div class="container">
 		<div class="catalog-user-menu">
 			<div class="catalog-user-left">
-				<a href="" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
+				<a href="<?= Url::to(['catalog/delivery_settings']) ?>" class="catalog-user-link wow fadeInUp">Настройки доставки</a>
+				<a href="<?= Url::to(['catalog/payment_settings']) ?>" class="catalog-user-link wow fadeInUp">Настройки оплаты</a>
 				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
 				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 			</div>

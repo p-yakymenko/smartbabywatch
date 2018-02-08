@@ -20,6 +20,8 @@ use app\models\Delivery_method;
 use app\models\Payment_method;
 use app\models\Order_status;
 use app\models\CatalogFilterForm;
+// ActiveForm для способов доставки
+use app\models\DeliveryInfoPickup; // самовывоз
 
 class CatalogController extends Controller{
 
@@ -314,18 +316,43 @@ class CatalogController extends Controller{
     * Блок управления профилем
     */
 
+    // Управление настройками доставки
     public function actionDelivery_settings($delivery_method = ''){
-        $user_id = Yii::$app->user->id;
-        $user = UserActiveRecord::findOne($user_id);
+        $user_id = Yii::$app->user->id; // сбор данных о пользователе для отображения формы
+        $user = UserActiveRecord::findOne($user_id); // получили id в предыдущей строке, теперь непосредственно получаем данные о пользователе
         
         if(empty($delivery_method)){ // если мы переходим по пустой ссылке, получаем активный способ доставки по юзеру из базы и делаем перенаправление
             $user_delivery_method = $user->delivery_method;
             return $this->redirect(['catalog/delivery_settings', 'delivery_method' => $user_delivery_method]);
         }
         
-        return $this->render('profile', [
-            'delivery_method' => $delivery_method
+        // собираем формы для данных
+        $pickup_form_model = new DeliveryInfoPickup;
+
+        // Обрабатываем данные 
+        if($delivery_method == 1){ // Если выбран самовывоз
+            if($pickup_form_model->load(Yii::$app->request->post()) && $pickup_form_model->validate()){ // Загружаем данные и проверяем их валидность
+                $user->delivery_method = 1;
+                $user->delivery_fio = $pickup_form_model->delivery_fio;
+
+
+            }
+        } else if ($delivery_method == 2){ // Если выбрана адресная доставка
+
+        } else { // Если выбрана курьерская доставка в другой город
+
+        }
+
+        // Вывод стандартной формы ввода данных для доставки
+        return $this->render('delivery_settings', [
+            'delivery_method' => $delivery_method,
+            'pickup_form_model' => $pickup_form_model
         ]);
+    }
+    
+    // Управление настройками оплаты
+    public function actionPayment_settings(){
+        
     }
 
     /*
