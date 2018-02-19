@@ -35,6 +35,36 @@
         <?php } // Конец foreach $ordered_items ?>
     </table>
     <p>Итого: <?= $summary_cost ?> рублей</p>
+    
+    <!-- ВЫВОД ИНФОРМАЦИИ О ДОСТАВКЕ -->
+        
+    <!-- Способ доставки -->
+    <?php
+        $delivery_methods = [1 => 'Самовывоз', 2 => 'Адресная доставка', 3 => 'Другой город'];
+        echo 'Способ доставки: '.$delivery_methods[$order->delivery_method].'<br>';
+    ?>
+    <!-- Способ оплаты -->
+    <?php
+        $payment_methods = [1 => 'Наличными', 2 => 'Visa/MasterCard', 3 => 'Webmoney', 4 => 'Яндекс.Деньги'];
+        echo 'Способ оплаты: '.$payment_methods[$order->payment_method].'<br>';
+
+    ?>
+
+    
+    ФИО получателя: <?= $order->delivery_fio ?><br>
+    Телефон получателя: <?= $order->delivery_phone_number ?><br>
+    Комментарий: <?= $order->delivery_comment ?><br>
+    <?php // опциональные поля для двух других способов доставки
+        if($order->delivery_method == 2){ // Адерсная доставка
+            echo 'Адрес: '.$order->delivery_address.'<br>';
+        } else if ($order->delivery_method == 3){ // Другой город
+            echo 'Город: '.$order->delivery_city.'<br>';
+            echo 'Курьерская служба: '.$order->delivery_courier.'<br>';
+        }
+    ?>
+
+    <!-- КОНЕЦ ВЫВОДА ИНФОРМАЦИИ О ДОСТАВКЕ -->
+    
     <hr>
     <p><b>Управление заказом</b></p>
     <p>Сменить статус: </p>

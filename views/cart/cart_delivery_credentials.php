@@ -104,7 +104,7 @@
 								
 							</div>
 
-							<?php $pickup_form = ActiveForm::begin(); ?>
+							<?php $pickup_form = ActiveForm::begin(['action' =>['cart/delivery_credentials'], 'method' => 'post',]); ?>
 
 								<?= $pickup_form->field($pickup_form_model,'delivery_fio')->label('ФИО получателя<span class="form-label-important">*</span></label>') ?>
 

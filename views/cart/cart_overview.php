@@ -44,8 +44,7 @@
 		<div class="catalog-user-menu">
 	<div class="catalog-user-left">
         <a href="<?= Url::to(['catalog/index']) ?>" class="catalog-user-link wow fadeInUp">Каталог</a>
-		<a href="" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
-		<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
+			<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
 		<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 	</div>
 	<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
@@ -132,11 +131,11 @@
 				</div> 
 	            
 	            
-				<a href="<?= Url::to(['cart/createorder']) ?>">
+				<a href="<?= Url::to(['cart/delivery_pickup']) ?>">
 				<button type="submit" class="btn btn-blue pull-right">Оформить заказ</button></a>
 
 				<!-- ОТЛОЖИТЬ В РЕЗЕРВ -->
-				<a href="<?= Url::to(['cart/createorder', 'status' => 'reserve']) ?>">
+				<a href="<?= Url::to(['cart/delivery_pickup', 'status' => 'reserve']) ?>">
 					<button type="submit" class="btn btn-white btn-white-hover pull-right">Отложить в резерв</button>     
 				</a>
 			</div>   

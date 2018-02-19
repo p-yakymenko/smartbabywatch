@@ -13,6 +13,8 @@ class EditProductForm extends Model{
     public $code;
     public $price;
     public $quantity;
+    public $description;
+    public $video;
 
     public function rules(){
         return [
@@ -20,7 +22,9 @@ class EditProductForm extends Model{
             [['brand'], 'required'],
             [['code'], 'required'],
             [['price'], 'required'],
-            [['quantity'], 'required']
+            [['quantity'], 'required'],
+            [['description'], 'default'],
+            [['video'], 'default']
         ];
     }
 

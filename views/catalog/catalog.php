@@ -51,8 +51,6 @@
 	<div class="container">
 		<div class="catalog-user-menu">
 			<div class="catalog-user-left">
-				<a href="<?= Url::to(['catalog/delivery_settings']) ?>" class="catalog-user-link wow fadeInUp">Настройки доставки</a>
-				<a href="<?= Url::to(['catalog/payment_settings']) ?>" class="catalog-user-link wow fadeInUp">Настройки оплаты</a>
 				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
 				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 			</div>
@@ -189,7 +187,7 @@
 				
 			]); ?>
 		
-		<div style="display: inline-block">
+		<div style="display: none"> <!-- фильтр товары с фотографиями -->
 			<div onclick="testFunction()">
 				<?= $catalog_filter->field($catalog_filter_form, 'items_with_photo')->checkbox([], false)->label('Только товары с фото') ?>
 			</div>
@@ -264,7 +262,7 @@
 								<td>
 									<div class="tovar-name">
 										<?= Html::img($item->picture, ['class' => 'tovar-name-img']) ?>
-										<a href="" class="tovar-name-title"><?= Html::encode($item->name) ?></a>
+										<a href="<?= Url::to(['catalog/item', 'id' => $item->id])?>" class="tovar-name-title"><?= Html::encode($item->name) ?></a>
 									</div>
 								</td>
 								<td><?= Html::encode($item->brand) ?></td>

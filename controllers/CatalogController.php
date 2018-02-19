@@ -20,8 +20,10 @@ use app\models\Delivery_method;
 use app\models\Payment_method;
 use app\models\Order_status;
 use app\models\CatalogFilterForm;
+use app\models\send_mail\SendMailForm.php // форма для отправки мыла
 // ActiveForm для способов доставки
 use app\models\DeliveryInfoPickup; // самовывоз
+use app\models\GalleryImages;
 
 class CatalogController extends Controller{
 
@@ -93,6 +95,37 @@ class CatalogController extends Controller{
             'catalog_filter_form' => $catalog_filter_form
         ]);
     }
+
+    /*
+    * ДЕЙСТВИЯ С ОДНИМ ТОВАРОМ
+    */
+
+    /* Отобразить ОДИН товар */
+    public function actionItem($id, $display = ''){
+        $item = Items::findOne($id); // Получаем информацию о товаре
+        $user_id = Yii::$app->user->id;// Получаем информацию о пользователе
+        $user = UserActiveRecord::findOne($user_id);
+        if(Yii::$app->user->isGuest){ // Если пользователь не залогинен, отправить его домой
+            return $this->redirect(['static/index']);            
+        }
+
+        $latest_news = News::find()->orderBy(['created_at' => SORT_DESC])->limit(3)->all(); // Получаем последние новости для их вывода на странице
+
+        // Получаем картинки из галереи
+        $gallery_images = GalleryImages::find()->where(['item_id' => $id])->all();
+        return $this->render('item', [
+            'item' => $item,
+            'user' => $user,
+            'sidebar_news' => $latest_news,
+            'display' => $display,
+            'gallery_images' => $gallery_images
+        ]);
+    }
+
+
+    /*
+    * КОНЕЦ ДЕЙСТВИЙ С ОДНИМ ТОВАРОМ
+    */
 
     /*
     * Блок действий, обрабатывающих заказы
@@ -350,10 +383,6 @@ class CatalogController extends Controller{
         ]);
     }
     
-    // Управление настройками оплаты
-    public function actionPayment_settings(){
-        
-    }
 
     /*
     * Блок статических текстовых страничек
@@ -379,5 +408,21 @@ class CatalogController extends Controller{
         $user_id = Yii::$app->user->id;
         $user = UserActiveRecord::findOne($user_id);
         return $this->render('delivery', ['user' => $user, 'sidebar_news' => $latest_news]);
+    }
+
+    /*
+    * Блок странички с отправкой мыла
+    */
+
+    public function actionSend_mail(){
+        // Получаем данные о пользователе для представления
+        $user_id = Yii::$app->user->id;
+        $user = UserActiveRecord::findOne($user_id);
+
+        return $this->render('send_mail',
+            [
+                'user' => $user
+            ]
+        );
     }
 }

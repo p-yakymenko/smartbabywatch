@@ -10,6 +10,7 @@ use app\models\Items;
 use app\models\UserActiveRecord;
 use app\models\News;
 use app\models\Orders;
+use app\models\Cart;
 use app\models\Payment_method;
 use app\models\Delivery_method;
 use app\models\AddProductForm;
@@ -20,6 +21,10 @@ use app\models\OrderStatusAlterForm;
 use app\models\Order_status;
 use app\models\NewPicForm;
 use app\models\Promotions;
+use app\models\Notifications;
+use app\models\Returns;
+use app\models\AddGalleryImageForm;
+use app\models\GalleryImages;
 
 class AdminController extends Controller{
     public $layout = 'admin'; // Задаём формат представлений для этого контроллера
@@ -27,7 +32,9 @@ class AdminController extends Controller{
 
     // Список всех продуктов
     public function actionProducts(){
-
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $items = Items::find()->all();
 
         return $this->render('products', ['items' => $items]);
@@ -36,6 +43,9 @@ class AdminController extends Controller{
 
     // Добавить новый продукт
     public function actionAddproduct(){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $model = new AddProductForm();
         if(Yii::$app->request->isPost){
             $model->load(Yii::$app->request->post());
@@ -49,6 +59,7 @@ class AdminController extends Controller{
             $new_item->quantity = $model->quantity;
             $new_item->price = $model->price;
             $new_item->picture = $pic_path;
+            $new_item->description = $model->description;
             $new_item->save();
             return $this->render('addproduct-success');
         } else {
@@ -59,16 +70,35 @@ class AdminController extends Controller{
 
     // Удалить продукт
     public function actionDeleteproduct($id){
-              
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
+        // сначала удаляем каскадом такие же товары из корзины и заказов
+        Cart::deleteAll(['item_id' => $id]);
+        Notifications::deleteAll(['item_id' => $id]);
+        OrderItems::deleteAll(['item_id' => $id]);
+
+        // когда упоминаний о товаре нету, удаляем его из таблицы
         $item_to_delete = Items::findOne($id);
         $item_to_delete->delete();
 
+        // и возвращаемся на страницу продуктов
         return $this->redirect(['admin/products']);
     }
     
-    // Редактировать существующий продукт
+    /*
+    * ========== БЛОК КАРТОЧКИ ТОВАРА ==========
+    */
+
+    /*
+    * Редактировать существующий продукт
+    */ 
     public function actionEditproduct($id){
-        $model = new EditProductForm();
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
+        $model = new EditProductForm(); // Форма редактирования основных сведений о товаре
+        
         $item_to_edit = Items::findOne($id);
         
         // Валидация данных
@@ -79,6 +109,8 @@ class AdminController extends Controller{
             $item_to_edit->code = $model->code;
             $item_to_edit->quantity = $model->quantity;
             $item_to_edit->price = $model->price;
+            $item_to_edit->description = $model->description;
+            $item_to_edit->video = $model->video;
             $item_to_edit->save();
             return $this->redirect(Url::to(['admin/products']));
         } else {
@@ -88,18 +120,76 @@ class AdminController extends Controller{
             $model->code = $item_to_edit->code;
             $model->quantity = $item_to_edit->quantity;
             $model->price = $item_to_edit->price;
-            $new_pic_form = new NewPicForm();
+            $model->description = $item_to_edit->description;
+            $model->video = $item_to_edit->video;
+            $new_pic_form = new NewPicForm(); // Форма добавления новой главной картинки
+            $new_gallery_image_model = new AddGalleryImageForm(); // Форма добавления новой картинки в галлерею
+
+            // Получаем список картинок из галлереи
+            $item_gallery = GalleryImages::find()->where(['item_id' => $id])->all();
+
+
             return $this->render('editproduct', [
                 'item' => $item_to_edit,
                 'model' => $model,
-                'new_pic_model' => $new_pic_form
+                'new_pic_model' => $new_pic_form,
+                'new_gallery_image_model' => $new_gallery_image_model,
+                'gallery_images' => $item_gallery // Изображения для галлереи
             ]);
         }
     }
+
+    /*
+    * Добавление новой картинки в галерею (Блок карточки товара)
+    * Вызывается из модального окна в карточке товара
+    */
+    public function actionNew_gallery_image($item_id){
+        if(!$this->admin_check()){ // Проверка, является ли пользователь админом
+            return $this->redirect(['static/index']);
+        }
+
+        // логика добавления картинки
+        $model = new AddGalleryImageForm();
+        if(Yii::$app->request->isPost){
+            // ...
+            $model->load(Yii::$app->request->post());
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            $pic_path = $model->upload(); // загружаем картинку
+            // сохраняем новое вхождение в базе
+            $new_gallery_entry = new GalleryImages();
+            $new_gallery_entry->item_id = $item_id;
+            $new_gallery_entry->picture = $pic_path;
+            $new_gallery_entry->save();
+        }
+        // возвращаемся на страницу редактирования товара
+        return $this->redirect(['admin/editproduct', 'id' => $item_id]);
+
+    }
+
+    /*
+    * Удаление картинки из галереи (Блок карточки товара)
+    * Вызывается из карточки товара
+    */
+    public function actionRemove_gallery_image($gallery_image_id){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
+        
+        $gallery_image_entry = GalleryImages::findOne($gallery_image_id);
+        $item_id = $gallery_image_entry->item_id;
+        unlink($gallery_image_entry->picture); // Удаляем картинку
+        $gallery_image_entry->delete(); // Удаляем вхождение в базе
+        return $this->redirect(['admin/editproduct', 'id' => $item_id]);
+    }
   
-    // Удалить текущую картинку на товаре
+    /*
+    * Удалить текущую картинку на товаре
+    */
     public function actionRemovepic($id){
-       // Удалить пусть к картинке
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
+       // Удалить путь к картинке
         $item = Items::findOne($id);
         $current_picture = $item->picture;
         $item->picture = '';
@@ -117,6 +207,9 @@ class AdminController extends Controller{
 
     // Загрузить новую картинку для товара
     public function actionNewpic($item_id){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $new_pic_model = new NewPicForm;
         if(Yii::$app->request->isPost){
             $new_pic_model->load(Yii::$app->request->post());
@@ -132,14 +225,22 @@ class AdminController extends Controller{
         return $this->redirect(['admin/editproduct', 'id' => $item_id]);
     }
 
-    /* БЛОК УПРАВЛЕНИЯ НОВОСТЯМИ */
+    /* 
+    * БЛОК УПРАВЛЕНИЯ НОВОСТЯМИ 
+    */
     // Отображает все текущие новости
     public function actionNews(){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $news = News::find()->all();
         return $this->render('all_news', ['news' => $news]);
     }
 
     public function actionAddnews(){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $model = new NewsEntryForm();
         
         if($model->load(Yii::$app->request->post()) && $model->validate()){ // Валидация
@@ -159,6 +260,9 @@ class AdminController extends Controller{
     
     // Редактирование одной новости
     public function actionEditnews($id){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $model = new NewsEntryForm();
         $news_entry = News::findOne($id);
 
@@ -177,6 +281,9 @@ class AdminController extends Controller{
     }
 
     public function actionDeletenews($id){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $news_entry = News::findOne($id);
         $new_entry->delete();
         return $this->redirect(['admin/news']);
@@ -185,6 +292,9 @@ class AdminController extends Controller{
     /* БЛОК УПРАВЛЕНИЯ ЗАКАЗАМИ */
     // Отобразить все заказы
     public function actionOrders(){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $orders = Orders::find()->all();
         $users = UserActiveRecord::find()->all();
         $payment_methods = Payment_method::find()->all();
@@ -199,6 +309,9 @@ class AdminController extends Controller{
 
     // Управление одним заказом
     public function actionOrder($id){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $model = new OrderStatusAlterForm();
         if($model->load(Yii::$app->request->post()) && $model->validate()){ // проверяем, зашли ли данные
             $order = Orders::findOne($id);
@@ -233,7 +346,11 @@ class AdminController extends Controller{
         ]);
     }
     
+    // Удаление заказа
     public function actionDeleteorder($id){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         // Удалить итемы из другой таблицы, чтобы не засорять
         $ordered_items = OrderItems::find()->where(['order_id' => $id])->all();
         foreach($ordered_items as $ordered_item){
@@ -250,12 +367,18 @@ class AdminController extends Controller{
     ===================================================*/ 
     
     public function actionDisplay_promotions(){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $promotions = Promotions::find()->orderBy(['created_at' => SORT_DESC])->all();
         return $this->render('all_promotions', ['promotions' => $promotions]);
     }
 
     /* Добавить новую акцию */
     public function actionAdd_promotion(){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $model = new NewsEntryForm(); // Используем ту же модель для формы - нужны одинаковые поля: тайтл и непосредственно текст
         
         if($model->load(Yii::$app->request->post()) && $model->validate()){
@@ -274,6 +397,9 @@ class AdminController extends Controller{
 
     /* Редактировать существующую акцию */
     public function actionEdit_promotion($id){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $model = new NewsEntryForm(); // Используем ту же форму, что и для новостей
         $promotion = Promotions::findOne($id);
         // Если данные даны
@@ -295,9 +421,33 @@ class AdminController extends Controller{
 
     /* Удалить существующую акцию */
     public function actionDelete_promotion($id){
+        if(!$this->admin_check()){
+            return $this->redirect(['static/index']);
+        }
         $promotion = Promotions::findOne($id);
         $promotion->delete();
         return $this->redirect(['admin/display_promotions']);
+    }
+
+    /*
+    * Функции для внутреннего использования
+    */
+
+    /*
+    * Проверка, залогинен ли пользователь, и является ли он администратором
+    */
+    private function admin_check(){
+        if(Yii::$app->user->isGuest){ // если пользователь не залогинен
+            return false;
+        } else { // если пользователь залогинен
+            $user_id = Yii::$app->user->id;
+            $user = UserActiveRecord::findOne($user_id);
+            if($user->access_rights == 200){ // и является админом
+                return true;
+            } else { // не является админом
+                return false;
+            }
+        }  
     }
 
 }
