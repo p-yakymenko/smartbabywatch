@@ -25,16 +25,7 @@
 			<a href=""><img src="style/img/icons/user.png" alt="">Регистрация</a>
 		</div>
 		<div class="header-col-basket" style="display: none">
-			<div class="header-basket">
-				<div class="header-basket-ico">
-					<img src="style/img/icons/basket-big.png" alt="">
-					<span class="header-basket-total">1</span>
-				</div>
-				<div class="header-basket-totalsum">
-					<h4>на сумму: 1234,56 руб</h4>
-					<a href="" class="header-basket-issue">Оформить заказ</a>
-				</div>
-			</div>
+			
 		</div>
 	</div>
 </header>
@@ -43,9 +34,8 @@
 	<div class="container">
 		<div class="catalog-user-menu">
 			<div class="catalog-user-left">
-				<a href="" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
-				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
-				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
+				<a href="<?= Url::to(['catalog/helpdesk']) ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
+				<a href="<?= Url::to(['catalog/send_mail']) ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 			</div>
 			<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
 				<span>Добро пожаловать, <?= $user->name ?> <?= $user->surname ?></span>
@@ -143,13 +133,13 @@
 
 		<div class="footer-bottom">
 			<div class="footer-col-corp wow fadeInUp">
-				<p>Copyright © ООО "Смарт Бэби Вотч" 2017. Все права защищены</p>
+				<p>Copyright © ООО "Смарт Бэби Вотч" 2018. Все права защищены</p>
 			</div>
 			<div class="footer-col-politic">
-				<a href="" class="footer-link wow fadeInUp" data-wow-delay="0.2s">Пользовательское соглашение</a>
+				<a href="<?= Url::to(['catalog/user_agreement']) ?>" class="footer-link wow fadeInUp" data-wow-delay="0.2s">Пользовательское соглашение</a>
 			</div>
 			<div class="footer-col-cond">
-				<a href="" class="footer-link wow fadeInUp" data-wow-delay="0.1s">Политика конфиденциальности</a>
+				<a href="<?= Url::to(['catalog/privacy_policy'])?>" class="footer-link wow fadeInUp" data-wow-delay="0.1s">Политика конфиденциальности</a>
 			</div>
 			<div class="footer-col-social">
 				<ul class="footer-social wow fadeInUp">

@@ -35,6 +35,7 @@
                     <li><a href="<?= Url::to(['admin/orders']) ?>">Заказы</a></li>
                     <li><a href="<?= Url::to(['admin/news']) ?>">Новости</a></li>
                     <li><a href="<?= Url::to(['admin/display_promotions']) ?>">Акции</a></li>
+                    <li><a href="<?= Url::to(['admin/reclamations']) ?>">Возвраты</a></li>
                     <li><a href="<?= Url::to(['catalog/index']) ?>">Вернуться на сайт</a></li>
                 </ul>
             </div>

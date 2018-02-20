@@ -25,22 +25,10 @@
 			<span class="header-work">Сб и Вс – выходной</span>
 		</div>
 		<div class="header-col-login" >
-		<?php $url_to_reg = Url::to(['secure/register'])?>
-		<?php $url_to_log = Url::to(['secure/login'])?>
-			<a href="<?= $url_to_log ?>"><img src="style/img/icons/out.png" alt="">Вход</a>
-			<a href="<?= $url_to_reg ?>"><img src="style/img/icons/user.png" alt="">Регистрация</a>
+		
 		</div>
 		<div class="header-col-basket" style="display: none">
-			<div class="header-basket">
-				<div class="header-basket-ico">
-					<img src="style/img/icons/basket-big.png" alt="">
-					<span class="header-basket-total">1</span>
-				</div>
-				<div class="header-basket-totalsum">
-					<h4>на сумму: 1234,56 руб</h4>
-					<a href="" class="header-basket-issue">Оформить заказ</a>
-				</div>
-			</div>
+			
 		</div>
 	</div>
 </header>
@@ -51,8 +39,8 @@
 	<div class="container">
 		<div class="catalog-user-menu">
 			<div class="catalog-user-left">
-				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
-				<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
+				<a href="<?= Url::to(['catalog/helpdesk']) ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
+				<a href="<?= Url::to(['catalog/send_mail']) ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 			</div>
 			<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
 				<span>Добро пожаловать, <?= $user->name ?> <?= $user->surname?></span>
@@ -300,6 +288,7 @@
 				</table>
 			</div>
 	</div>
+	<!-- КОНЕЦ ПЕРВОЙ ВКЛАДКИ -->
 	<!-- ВТОРАЯ ВКЛАДКА -->
 	<div class="tab-pane" id="2b">
 	<?php foreach($items as $item){ ?>	
@@ -307,10 +296,10 @@
 		<div class="catalog-list">
 			<div class="catalog-list-item catalog-list-item-disable">
 				<div class="catalog-list-field-img">
-					<a href=""><?= Html::img($item->picture) ?></a>
+					<a href="<?= Url::to(['catalog/item', 'id' => $item->id])?>"><?= Html::img($item->picture, ['class' => 'tovar-name-img']) ?></a>
 				</div>
 				<div class="catalog-list-field-text">
-					<h3 class="catalog-list-title"><a href=""><?= $item->name ?></a></h3>
+					<h3 class="catalog-list-title"><a href="<?= Url::to(['catalog/item', 'id' => $item->id])?>"><?= $item->name ?></a></h3>
 					<ul class="catalog-list-details">
 						<li class="catalog-list-details-item">Код товара: <span><?= $item->code ?> </span></li>
 						<li><span class="tovar-status tovar-status-none">не доступно</span></li>
@@ -327,10 +316,10 @@
 		<?php } else { // если товар доступен ?>
 			<div class="catalog-list-item">
 				<div class="catalog-list-field-img">
-					<a href=""><?= Html::img($item->picture) ?></a>
+					<a href="<?= Url::to(['catalog/item', 'id' => $item->id])?>"><?= Html::img($item->picture, ['class' => 'tovar-name-img']) ?></a>
 				</div>
 				<div class="catalog-list-field-text">
-					<h3 class="catalog-list-title"><a href=""><?= $item->name ?></a></h3>
+					<h3 class="catalog-list-title"><a href="<?= Url::to(['catalog/item', 'id' => $item->id])?>"><?= $item->name ?></a></h3>
 					<ul class="catalog-list-details">
 						<li class="catalog-list-details-item">Код товара: <span><?= $item->code ?></span></li>
 						<li><span class="tovar-status">В наличии</span></li>
@@ -395,13 +384,13 @@
 
 		<div class="footer-bottom">
 			<div class="footer-col-corp wow fadeInUp">
-				<p>Copyright © ООО "Смарт Бэби Вотч" 2017. Все права защищены</p>
+				<p>Copyright © ООО "Смарт Бэби Вотч" 2018. Все права защищены</p>
 			</div>
 			<div class="footer-col-politic">
-				<a href="" class="footer-link wow fadeInUp" data-wow-delay="0.2s">Пользовательское соглашение</a>
+				<a href="<?= Url::to(['catalog/user_agreement']) ?>" class="footer-link wow fadeInUp" data-wow-delay="0.2s">Пользовательское соглашение</a>
 			</div>
 			<div class="footer-col-cond">
-				<a href="" class="footer-link wow fadeInUp" data-wow-delay="0.1s">Политика конфиденциальности</a>
+				<a href="<?= Url::to(['catalog/privacy_policy'])?>" class="footer-link wow fadeInUp" data-wow-delay="0.1s">Политика конфиденциальности</a>
 			</div>
 			<div class="footer-col-social">
 				<ul class="footer-social wow fadeInUp">

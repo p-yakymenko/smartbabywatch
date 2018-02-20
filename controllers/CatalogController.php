@@ -340,6 +340,7 @@ class CatalogController extends Controller{
             $return->item_quantity = $new_return_form->item_quantity;
             $return->date = $new_return_form->date;
             $return->reason = $new_return_form->reason;
+            $return->user = $user->username;
             $return->save();
 
             return $this->render('return_create', [ // И выводим ту же странцу с надписью "всё успешно"

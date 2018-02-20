@@ -12,7 +12,7 @@
         <?= $form->field($model, 'code')->label('Код') ?>
         <?= $form->field($model, 'quantity')->label('Количество*') ?>
         <?= $form->field($model, 'price')->label('Цена*') ?>
-        <?= $form->field($model, 'descirption')->label('Описание')->textarea() ?>
+        <?= $form->field($model, 'description')->label('Описание')->textarea() ?>
         <?= $form->field($model, 'imageFile')->fileInput() ?>
         <?= $form->field($model, 'video')->label('Введите код видео с youtube (Пример: в ссылке https://www.youtube.com/watch?v=GsXok_8h5p4 кодом будет GsXok_8h5p4') ?>
         

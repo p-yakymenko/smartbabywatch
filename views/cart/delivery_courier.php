@@ -30,10 +30,10 @@
 	<section class="section-wrap">
 	<div class="container">
 		<div class="catalog-user-menu">
-	<div class="catalog-user-left">
-		<a href="" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
-		<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
-		<a href="" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
+		<div class="catalog-user-left">
+        <a href="<?= Url::to(['catalog/index']) ?>" class="catalog-user-link wow fadeInUp">Каталог</a>
+		<a href="<?= Url::to(['catalog/helpdesk']) ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
+		<a href="<?= Url::to(['catalog/send_mail']) ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 	</div>
 	<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
 		<span>Добро пожаловать, Иван Петров</span>

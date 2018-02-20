@@ -225,6 +225,43 @@ class AdminController extends Controller{
         return $this->redirect(['admin/editproduct', 'id' => $item_id]);
     }
 
+    /*
+    * УПРАВЛЕНИЕ ВОЗВРАТАМИ
+    */
+
+    /* Функция вывода всех возвратов */
+    public function actionReclamations(){
+        if(!$this->admin_check()){ // Проверка на то, является ли пользователь администратором
+            return $this->redirect(['static/index']);
+        }
+
+        $reclamations = Returns::find()->all(); // Информация о всех заявках на возврат
+        $users = UserActiveRecord::find()->all(); // Собираем контактные данные пользователей
+        foreach($users as $user){
+            $user_array[$user->id] = $user->username;
+        }
+
+        return $this->render('reclamations',[
+                'reclamations' => $reclamations, // Список товаров на возврат
+                'user_list' => $user_array // Информация об e-mail'ах покупателей
+            ]
+        );
+
+    }
+
+    /* Функция удаления возврата (для разрешённой проблемы) */
+    public function actionReclamation_delete($reclamation_id){
+        // удаляем заявку на возврат
+        $reclamation_entry = Returns::find()->one($reclamation_id);
+        $reclamation_entry->delete();
+        // возвращаемся к списку возвратов
+        return $this->redirect(['admin/reclamations']);
+    }
+
+    /*
+    * КОНЕЦ БЛОКОВ ВОЗВРАТОВ
+    */
+
     /* 
     * БЛОК УПРАВЛЕНИЯ НОВОСТЯМИ 
     */
@@ -285,7 +322,7 @@ class AdminController extends Controller{
             return $this->redirect(['static/index']);
         }
         $news_entry = News::findOne($id);
-        $new_entry->delete();
+        $news_entry->delete();
         return $this->redirect(['admin/news']);
     }
 
