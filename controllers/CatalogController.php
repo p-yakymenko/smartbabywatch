@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\data\Pagination;
+use yii\mail\MessageInterface;
 
 use app\models\Items; // наша ActiveRecord модель для работы с товарами
 use app\models\Cart; // Модель для работы с корзиной
@@ -20,7 +21,7 @@ use app\models\Delivery_method;
 use app\models\Payment_method;
 use app\models\Order_status;
 use app\models\CatalogFilterForm;
-use app\models\send_mail\SendMailForm.php // форма для отправки мыла
+use app\models\SendMailForm; // форма для отправки мыла
 // ActiveForm для способов доставки
 use app\models\DeliveryInfoPickup; // самовывоз
 use app\models\GalleryImages;
@@ -33,7 +34,7 @@ class CatalogController extends Controller{
     * Главное действие - каталог товаров
     */
     public function actionIndex(){
-        
+        $this->user_check();
         $catalog_filter_form = new CatalogFilterForm;
         if($catalog_filter_form->load(Yii::$app->request->get()) && $catalog_filter_form->validate()){ // если форма в каталоге была использована
             // Получаем из базы информацию про товары с использованием информации из фильтра
@@ -102,6 +103,7 @@ class CatalogController extends Controller{
 
     /* Отобразить ОДИН товар */
     public function actionItem($id, $display = ''){
+        $this->user_check();
         $item = Items::findOne($id); // Получаем информацию о товаре
         $user_id = Yii::$app->user->id;// Получаем информацию о пользователе
         $user = UserActiveRecord::findOne($user_id);
@@ -133,6 +135,7 @@ class CatalogController extends Controller{
 
     // Просмотр/изменение одного заказа
     public function actionEdit_order($id){
+        $this->user_check();
         // Получаем информацию о заказе
         $order = Orders::findOne($id);
 
@@ -190,6 +193,7 @@ class CatalogController extends Controller{
 
     // Подтвердить зарезервированный заказ
     public function actionReserve_to_confirmed($id){
+        $this->user_check();
         $order = Orders::findOne($id); // Находим заказ
         $order->status = 1; // Заменяем статус на создан
         $order->save(); // Сохраняем заказ
@@ -214,6 +218,7 @@ class CatalogController extends Controller{
 
     // Просмотр одной новости
     public function actionNewsentry($id){
+        $this->user_check();
         $news_entry = News::findOne($id);
         $user_id = Yii::$app->user->id;
         $user = UserActiveRecord::findOne($user_id);
@@ -227,6 +232,7 @@ class CatalogController extends Controller{
 
     // Все акции
     public function actionPromotions(){
+        $this->user_check();
         $promotions = Promotions::find()->orderBy(['created_at' => SORT_DESC])->all();
         $user_id = Yii::$app->user->id;
         $user = UserActiveRecord::findOne($user_id);
@@ -239,6 +245,7 @@ class CatalogController extends Controller{
     
     //Отдельная акция
     public function actionPromotion($id){
+        $this->user_check();
         $promotion = Promotions::findOne($id);
         $user_id = Yii::$app->user->id;
         $user = UserActiveRecord::findOne($user_id);
@@ -256,6 +263,7 @@ class CatalogController extends Controller{
 
     // Отображение уведомлений
     public function actionMy_notifications(){
+        $this->user_check();
         $user_id = Yii::$app->user->id; // Получаем пользователя для представления
         $user = UserActiveRecord::findOne($user_id);
         // Получаем последние новости для их вывода на сайдбаре странице
@@ -286,6 +294,7 @@ class CatalogController extends Controller{
 
     // Добавить в очередь уведомление о товаре
     public function actionNotification_add($item_id){
+        $this->user_check();
         $user_id = Yii::$app->user->id;
 
         // Проверяем, нет ли уже такого активного уведомления
@@ -303,6 +312,7 @@ class CatalogController extends Controller{
 
     // Удалить уведомление
     public function actionNotification_remove($id){
+        $this->user_check();
         $notification = Notifications::findOne($id);
         $notification->delete();
         return $this->redirect(['catalog/my_notifications']);
@@ -315,6 +325,7 @@ class CatalogController extends Controller{
 
     // Создать новый возврат
     public function actionReturn_create(){
+        $this->user_check();
         $new_return_form = new ReturnCreateForm; // Форма возврата
         $user_id = Yii::$app->user->id; // Получаем пользователя для представления
         $user = UserActiveRecord::findOne($user_id);
@@ -351,6 +362,7 @@ class CatalogController extends Controller{
 
     // Управление настройками доставки
     public function actionDelivery_settings($delivery_method = ''){
+        $this->user_check();
         $user_id = Yii::$app->user->id; // сбор данных о пользователе для отображения формы
         $user = UserActiveRecord::findOne($user_id); // получили id в предыдущей строке, теперь непосредственно получаем данные о пользователе
         
@@ -390,7 +402,7 @@ class CatalogController extends Controller{
 
     // Страница гарантий
     public function actionGuarantee(){
-
+        $this->user_check();
         // Получаем последние новости для их вывода на странице
         $latest_news = News::find()->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
         
@@ -401,7 +413,7 @@ class CatalogController extends Controller{
 
     // Страница доставки
     public function actionDelivery(){
-
+        $this->user_check();
         // Получаем последние новости для их вывода на странице
         $latest_news = News::find()->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
         
@@ -410,19 +422,101 @@ class CatalogController extends Controller{
         return $this->render('delivery', ['user' => $user, 'sidebar_news' => $latest_news]);
     }
 
+    // Страничка помощи
+    public function actionHelpdesk(){
+        $this->user_check();
+        $user_id = Yii::$app->user->id;
+        $user = UserActiveRecord::findOne($user_id);
+
+         // Получаем последние новости для их вывода на странице
+         $latest_news = News::find()->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
+
+        return $this->render('helpdesk', [
+            'user' => $user,
+            'sidebar_news' => $latest_news
+        ]);
+    }
+
+    // Страничка "Пользовательское соглашение"
+    public function actionUser_agreement(){
+        $this->user_check();
+        $user_id = Yii::$app->user->id;
+        $user = UserActiveRecord::findOne($user_id);
+
+         // Получаем последние новости для их вывода на странице
+         $latest_news = News::find()->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
+
+        return $this->render('user_agreement', [
+            'user' => $user,
+            'sidebar_news' => $latest_news
+        ]);
+    }
+
+
+    // Страничка "Политика конфиденциальности"
+    public function actionPrivacy_policy(){
+        $this->user_check();
+        $user_id = Yii::$app->user->id;
+        $user = UserActiveRecord::findOne($user_id);
+
+         // Получаем последние новости для их вывода на странице
+         $latest_news = News::find()->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
+
+        return $this->render('privacy_policy', [
+            'user' => $user,
+            'sidebar_news' => $latest_news
+        ]);
+    }
+
+
     /*
     * Блок странички с отправкой мыла
     */
 
     public function actionSend_mail(){
+        $this->user_check();
         // Получаем данные о пользователе для представления
         $user_id = Yii::$app->user->id;
         $user = UserActiveRecord::findOne($user_id);
 
-        return $this->render('send_mail',
-            [
-                'user' => $user
-            ]
-        );
+        // Берём модель для формы отправки мыла
+        $mail_send_form_model = new SendMailForm();
+
+        if($mail_send_form_model->load(Yii::$app->request->post()) && $mail_send_form_model->validate()){ // Если введены данные, отрабатывает письмо
+            // получаем из информации о пользователе его email
+            $email_from = $user->username; // login = email
+            Yii::$app->mailer->compose()
+                ->setFrom($email_from)
+                ->setTo('yackimenko.pavel@gmail.com')
+                ->setSubject('Вопрос с сайта smartbabywatch')
+                ->setTextBody($mail_send_form_model->mail_text)
+                ->send();
+            return $this->redirect(['catalog/index']); ; // И возвращаемся к каталогу
+        } else { // или же
+            // Выводим стандартную форму
+            return $this->render('send_mail',
+                [
+                    'user' => $user,
+                    'mail_send_form' => $mail_send_form_model
+                ]
+            );
+        }
+
+        
+    }
+
+    /*
+    * Конец блока странички отправки мыла
+    */
+
+    /*
+    * Сервисные функции
+    */
+
+    // Страница проверки, залогинен ли пользователь
+    private function user_check(){
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['static/index']);
+        }
     }
 }

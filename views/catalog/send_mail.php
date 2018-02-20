@@ -1,4 +1,5 @@
 <?php
+    use yii\helpers\Html;
     use yii\helpers\Url;
     use yii\widgets\ActiveForm;
 ?>
@@ -21,10 +22,6 @@
 			<span class="header-work">Пн-Пт с 8:30 до 17:30 по МСК</span>
 			<span class="header-work">Сб и Вс – выходной</span>
 		</div>
-		<div class="header-col-login" >
-			<a href=""><img src="style/img/icons/out.png" alt="">Вход</a>
-			<a href=""><img src="style/img/icons/user.png" alt="">Регистрация</a>
-		</div>
 		<div class="header-col-basket" style="display: none">
 			
 		</div>
@@ -45,12 +42,18 @@
 	        </div>
         </div>
         <center>
-            <h2>Написать письмо</h2>
-
+            <h2>Написать письмо</h2><br>
+            <!-- ФОРМА ОТПРАВКИ МЫЛА -->
+            <div class="col-sm-8 col-sm-offset-2">
+            
             <?php $mail_form = ActiveForm::begin() ?>
-
+                <?= $mail_form->field($mail_send_form, 'mail_text')->textarea()->label('Текст письма') ?>
+                
+                <?= Html::submitButton('Отправить', ['class' => 'btn btn-default']) ?> 
 
             <?php ActiveForm::end() ?>
+            </div>
+            <!-- КОНЕЦ ФОРМЫ ОТПРАВКИ МЫЛА -->
         </center>
 	</div>
 </section>

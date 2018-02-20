@@ -21,19 +21,11 @@
 			<span class="header-work">Сб и Вс – выходной</span>
 		</div>
 		<div class="header-col-login" >
-			<a href=""><img src="style/img/icons/out.png" alt="">Вход</a>
-			<a href=""><img src="style/img/icons/user.png" alt="">Регистрация</a>
+
 		</div>
 		<div class="header-col-basket" style="display: none">
 			<div class="header-basket">
-				<div class="header-basket-ico">
-					<img src="style/img/icons/basket-big.png" alt="">
-					<span class="header-basket-total">1</span>
-				</div>
-				<div class="header-basket-totalsum">
-					<h4>на сумму: 1234,56 руб</h4>
-					<a href="" class="header-basket-issue">Оформить заказ</a>
-				</div>
+				
 			</div>
 		</div>
 	</div>
