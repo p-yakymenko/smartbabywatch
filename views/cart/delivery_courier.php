@@ -37,7 +37,7 @@
 	</div>
 	<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
 		<span>Добро пожаловать, Иван Петров</span>
-		<a href="">Выйти</a>
+		<a href="<?= Url::to(['secure/logout']) ?>">Выйти</a>
 	</div>
 </div>
 
@@ -47,7 +47,7 @@
 			</div>
 			<div class="profile-top-sep">/</div>
 			<h3 class="profile-top-title">
-				Профиль и настройки
+				Настройки
 			</h3>
 		</div>
 		

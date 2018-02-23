@@ -22,9 +22,12 @@ use app\models\Payment_method;
 use app\models\Order_status;
 use app\models\CatalogFilterForm;
 use app\models\SendMailForm; // форма для отправки мыла
+use app\models\ProfileEditForm; // Форма редактирования профиля
+use app\models\NewPasswordForm; // Форма нового пароля для аккаунта
 // ActiveForm для способов доставки
 use app\models\DeliveryInfoPickup; // самовывоз
 use app\models\GalleryImages;
+use app\models\TrackingForm;
 
 class CatalogController extends Controller{
 
@@ -358,9 +361,114 @@ class CatalogController extends Controller{
     }
 
     /*
-    * Блок управления профилем
+    * БЛОК СТРАНИЦЫ ОТСЛЕЖИВАНИЯ СТАТУСА ЗАКАЗА
     */
 
+    public function actionTrack(){
+        $this->user_check();
+        $tracking_form = new TrackingForm();
+        $user_id = Yii::$app->user->id;
+        $user = UserActiveRecord::findOne($user_id);
+        $latest_news = News::find()->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
+
+        if($tracking_form->load(Yii::$app->request->post()) && $tracking_form->validate()){
+            $order_no = $tracking_form->order_no;
+            //проверяем, есть ли такой заказ и полуаем его статус
+            $order = Orders::findOne($order_no);
+            if(empty($order)){
+                $order_status = 'Нет такого заказа';
+            } else {
+                $status_id = $order->status;
+                $status_query = Order_status::findOne($status_id);
+                $order_status = $status_query->ru;
+            }
+            
+            return $this->render('track', [
+                'user' => $user,
+                'tracking_form' => $tracking_form,
+                'sidebar_news' => $latest_news,
+                'order_status' => $order_status
+            ]);
+        } else {
+            return $this->render('track', [
+                'user' => $user,
+                'tracking_form' => $tracking_form,
+                'sidebar_news' => $latest_news
+            ]);
+        }
+
+    }
+
+    /*
+    * БЛОК УПРАВЛЕНИЯ ПРОФИЛЕМ
+    */
+
+    /* Настройки профиля */
+    public function actionProfile_settings(){
+        $this->user_check();
+        $user_id = Yii::$app->user->id;
+        $user = UserActiveRecord::findOne($user_id);
+        $latest_news = News::find()->orderBy(['created_at' => SORT_DESC])->limit(3)->all();
+        $profile_edit_form = new ProfileEditForm(); // Берём форму для изменения данных
+        
+        // валидация и обработка данных
+        if($profile_edit_form->load(Yii::$app->request->post()) && $profile_edit_form->validate()){
+            // Сохраняем данные
+            $user->name = $profile_edit_form->name;
+            $user->surname = $profile_edit_form->surname;
+            $user->fathers_name = $profile_edit_form->fathers_name;
+            $user->username = $profile_edit_form->email;
+            $user->phone = $profile_edit_form->phone_number;
+            $user->restock_notification = $profile_edit_form->restock_notification;
+            $user->order_status_update_notification = $profile_edit_form->order_status_update_notification;
+            $user->newsletter = $profile_edit_form->newsletter;
+            $user->save();
+            $new_pwd_form = new NewPasswordForm();
+            return $this->render('profile_settings', [
+                'user' => $user,
+                'sidebar_news' => $latest_news,
+                'profile_edit_form' => $profile_edit_form,
+                'new_pass_form' => $new_pwd_form,
+                'message' => 'Данные сохранены успешно!'
+            ]);
+
+        } else {
+            // Наполянем форму данными из базы
+            $profile_edit_form->name = $user->name;
+            $profile_edit_form->surname = $user->surname;
+            $profile_edit_form->fathers_name = $user->fathers_name;
+            $profile_edit_form->email = $user->username;
+            $profile_edit_form->phone_number = $user->phone;
+            $profile_edit_form->restock_notification = $user->restock_notification;
+            $profile_edit_form->order_status_update_notification = $user->order_status_update_notification;
+            $profile_edit_form->newsletter = $user->newsletter;
+            
+            $new_pwd_form = new NewPasswordForm();
+            return $this->render('profile_settings', [
+                'user' => $user,
+                'sidebar_news' => $latest_news,
+                'new_pass_form' => $new_pwd_form,
+                'profile_edit_form' => $profile_edit_form
+            ]);
+        }        
+    }
+
+    /* ФУНКЦИЯ ОБНОВЛЕНИЯ ПАРОЛЯ */
+    public function actionNew_password(){
+        $new_pwd_form = new NewPasswordForm();
+        
+        if($new_pwd_form->load(Yii::$app->request->post()) && $new_pwd_form->validate()){ // Валидация
+            $password_hash = Yii::$app->getSecurity()->generatePasswordHash($new_pwd_form->new_password);
+            $user_id = Yii::$app->user->id;
+            $user = UserActiveRecord::findOne($user_id);
+            $user->password = $password_hash;
+            $user->save();
+        }
+        
+        return $this->redirect(['catalog/profile_settings']);
+    }
+    
+    /* DEPRECATED - настройки доставки теперь в заказе */
     // Управление настройками доставки
     public function actionDelivery_settings($delivery_method = ''){
         $this->user_check();
@@ -398,7 +506,7 @@ class CatalogController extends Controller{
     
 
     /*
-    * Блок статических текстовых страничек
+    * БЛОК СТАТИЧЕСКИХ ТЕКСТОВЫХ СТРАНИЧЕК
     */
 
     // Страница гарантий

@@ -44,13 +44,14 @@
 	<section class="section-catalog">
 	<div class="container">
 		<div class="catalog-user-menu">
-			<div class="catalog-user-left">
+		<div class="catalog-user-left">
+				<a href="<?= Url::to(['catalog/profile_settings']) ?>" class="catalog-user-link wow fadeInUp">Профиль и настройки</a>
 				<a href="<?= Url::to(['catalog/helpdesk']) ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.2s">Помощь</a>
 				<a href="<?= Url::to(['catalog/send_mail']) ?>" class="catalog-user-link wow fadeInUp" data-wow-delay="0.1s">Написать письмо</a>
 			</div>
 			<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
 				<span>Добро пожаловать, <?= $user->name ?> <?= $user->surname ?></span>
-				<a href="">Выйти</a>
+				<a href="<?= Url::to(['secure/logout']) ?>">Выйти</a>
 			</div>
 		</div>
 		 

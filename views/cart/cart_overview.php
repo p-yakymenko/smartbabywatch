@@ -42,7 +42,7 @@
 	</div>
 	<div class="catalog-user-right wid wow fadeInUp" data-wow-delay="0.3s">
 		<span>Добро пожаловать, Иван Петров</span>
-		<a href="">Выйти</a>
+		<a href="<?= Url::to(['secure/logout']) ?>">Выйти</a>
 	</div>
 </div>
 
